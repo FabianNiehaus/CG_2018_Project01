@@ -2,7 +2,7 @@
 
 bool OGLWidget::readData()
 {
-    ifstream file("E:\\Documents\\Project1\\cubeobj.sec");
+    ifstream file("cubeobj.sec");
 
     if(!file){
         cout << "error opening file" << endl;
