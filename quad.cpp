@@ -47,3 +47,44 @@ void Quad::setP4(int value)
 {
     p4 = value;
 }
+
+int Quad::getN1() const
+{
+    return n1;
+}
+
+void Quad::setN1(int value)
+{
+    n1 = value;
+}
+
+int Quad::getN2() const
+{
+    return n2;
+}
+
+void Quad::setN2(int value)
+{
+    n2 = value;
+}
+
+int Quad::getN3() const
+{
+    return n3;
+}
+
+void Quad::setN3(int value)
+{
+    n3 = value;
+}
+
+int Quad::getN4() const
+{
+    return n4;
+}
+
+void Quad::setN4(int value)
+{
+    n4 = value;
+}
+

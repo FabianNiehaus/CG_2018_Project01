@@ -46,3 +46,15 @@ void Vertex::setEdges(int value)
 {
     edges = value;
 }
+
+bool Vertex::compareVertices(Vertex *v1, Vertex *v2)
+{
+    if(v1->getX() == v2->getX()){
+        if(v1->getY() == v2->getY()){
+            if(v1->getZ() == v2->getZ()){
+                return true;
+            }
+        }
+    }
+    return false;
+}

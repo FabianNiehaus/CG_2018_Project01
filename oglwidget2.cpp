@@ -24,7 +24,7 @@ bool OGLWidget2::readData()
         if(key == "f"){
             file >> p1 >> p2 >> p3 >> p4;
             if( file.eof() ) break;
-            quads.push_back(Quad(p1, p2, p3, p4));
+            quads.push_back(Quad(p1-1, p2-1, p3-1, p4-1));
         }
     }
 
@@ -43,10 +43,10 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
         for(unsigned int i=0; i<quads.size();i++){
             Quad q = quads.at(i);
 
-            Vertex v1 = vertices.at(q.getP1()-1);
-            Vertex v2 = vertices.at(q.getP2()-1);
-            Vertex v3 = vertices.at(q.getP3()-1);
-            Vertex v4 = vertices.at(q.getP4()-1);
+            Vertex v1 = vertices.at(q.getP1());
+            Vertex v2 = vertices.at(q.getP2());
+            Vertex v3 = vertices.at(q.getP3());
+            Vertex v4 = vertices.at(q.getP4());
 
             glBegin(GL_LINES);
                 float colorScale = (((float)i+1.0f) / (float)quads.size());

@@ -18,6 +18,8 @@ public:
     int getEdges() const;
     void setEdges(int value);
 
+    static bool compareVertices(Vertex * v1, Vertex * v2);
+
 private:
     float x;
     float y;

@@ -40,6 +40,9 @@ private:
 
     bool readSuccess = false;
 
+    void calculateVertexValence();
+    void determineQuadNeighbours();
+
 };
 
 
