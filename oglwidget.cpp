@@ -48,16 +48,29 @@ void OGLWidget::drawQuad() // drawing a quad in OpenGL
             Vertex v3 = vertices.at(q.getP3());
             Vertex v4 = vertices.at(q.getP4());
 
+            QVector3D vec1 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
+            QVector3D vec2 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
+            QVector3D vec3 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
+            QVector3D vec4 = QVector3D(v4.getX(), v4.getY(), v4.getZ());
+
             glBegin(GL_QUADS); // each 4 points define a polygon
                 //float colorScale = (((float)i+1.0f) / (float)quads.size());
                 //glColor3f(1.0 * colorScale, 1.0 * colorScale, 1.0 * colorScale);
 
-                glNormal3f(v2.getX() * 0.5 - v1.getX() * 0.5, v2.getY() * 0.5 - v1.getY() * 0.5, v2.getZ() * 0.5 - v1.getZ() * 0.5);
+                QVector3D vecTemp = QVector3D::crossProduct(vec2-vec1,vec4-vec1);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
+
+                vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
 
-                glNormal3f(v4.getX() * 0.5 - v3.getX() * 0.5, v4.getY() * 0.5 - v3.getY() * 0.5, v4.getZ() * 0.5 - v3.getZ() * 0.5);
+                vecTemp = QVector3D::crossProduct(vec2-vec3,vec4-vec3);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
+
+                vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v4.getX() * 0.5, v4.getY() * 0.5, v4.getZ() * 0.5);
             glEnd(); // concludes GL_QUADS
 
