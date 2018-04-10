@@ -28,11 +28,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    oglwidget.cpp
+    vertex.cpp \
+    quad.cpp \
+    oglwidget.cpp \
+    oglwidget2.cpp
 
 HEADERS += \
         mainwindow.h \
-    oglwidget.h
+    vertex.h \
+    quad.h \
+    oglwidget.h \
+    oglwidget2.h
 
 FORMS += \
         mainwindow.ui

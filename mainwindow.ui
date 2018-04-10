@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1143</width>
-    <height>657</height>
+    <width>961</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,18 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>1121</width>
-      <height>601</height>
+      <width>461</width>
+      <height>421</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="OGLWidget2" name="openGLWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>10</y>
+      <width>461</width>
+      <height>421</height>
      </rect>
     </property>
    </widget>
@@ -30,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1143</width>
+     <width>961</width>
      <height>21</height>
     </rect>
    </property>
@@ -51,6 +61,11 @@
    <class>OGLWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>oglwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>OGLWidget2</class>
+   <extends>QOpenGLWidget</extends>
+   <header>oglwidget2.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

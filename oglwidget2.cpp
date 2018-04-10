@@ -1,6 +1,6 @@
-#include "oglwidget.h"
+#include "oglwidget2.h"
 
-bool OGLWidget::readData()
+bool OGLWidget2::readData()
 {
     ifstream file("E:\\Documents\\Project1\\cubeobj.sec");
 
@@ -34,11 +34,11 @@ bool OGLWidget::readData()
     return true;
 }
 
-void OGLWidget::drawQuad() // drawing a quad in OpenGL
+void OGLWidget2::drawQuad() // drawing a quad in OpenGL
 {
     if(readSuccess){
 
-        cout << "Zeichne Quads" << endl;
+        cout << "Zeichne Lines" << endl;
 
         for(unsigned int i=0; i<quads.size();i++){
             Quad q = quads.at(i);
@@ -48,17 +48,21 @@ void OGLWidget::drawQuad() // drawing a quad in OpenGL
             Vertex v3 = vertices.at(q.getP3()-1);
             Vertex v4 = vertices.at(q.getP4()-1);
 
-            glBegin(GL_QUADS); // each 4 points define a polygon
-                //float colorScale = (((float)i+1.0f) / (float)quads.size());
-                //glColor3f(1.0 * colorScale, 1.0 * colorScale, 1.0 * colorScale);
+            glBegin(GL_LINES);
+                float colorScale = (((float)i+1.0f) / (float)quads.size());
+                glColor3f(1.0 * colorScale, 1.0 * colorScale, 1.0 * colorScale);
 
-                glNormal3f(v2.getX() * 0.5 - v1.getX() * 0.5, v2.getY() * 0.5 - v1.getY() * 0.5, v2.getZ() * 0.5 - v1.getZ() * 0.5);
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
                 glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
 
-                glNormal3f(v4.getX() * 0.5 - v3.getX() * 0.5, v4.getY() * 0.5 - v3.getY() * 0.5, v4.getZ() * 0.5 - v3.getZ() * 0.5);
+                glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
+                glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
+
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
                 glVertex3d(v4.getX() * 0.5, v4.getY() * 0.5, v4.getZ() * 0.5);
+
+                glVertex3d(v4.getX() * 0.5, v4.getY() * 0.5, v4.getZ() * 0.5);
+                glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
             glEnd(); // concludes GL_QUADS
 
         }
@@ -66,19 +70,19 @@ void OGLWidget::drawQuad() // drawing a quad in OpenGL
 }
 
 
-OGLWidget::OGLWidget(QWidget *parent) // constructor
+OGLWidget2::OGLWidget2(QWidget *parent) // constructor
     : QOpenGLWidget(parent)
 {
 
 }
 
-OGLWidget::~OGLWidget() // destructor
+OGLWidget2::~OGLWidget2() // destructor
 {
 
 }
 
 
-void OGLWidget::initializeGL() // initializations to be called once
+void OGLWidget2::initializeGL() // initializations to be called once
 {
     // * https://www.ntu.edu.sg/home/ehchua/programming/opengl/CG_Examples.html
 
@@ -89,7 +93,7 @@ void OGLWidget::initializeGL() // initializations to be called once
     glDepthFunc(GL_LEQUAL); // *
     glShadeModel(GL_SMOOTH); // *
     glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHTING);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // *
@@ -97,7 +101,7 @@ void OGLWidget::initializeGL() // initializations to be called once
     readSuccess = readData();
 }
 
-void OGLWidget::paintGL() // draw everything, to be called repeatedly
+void OGLWidget2::paintGL() // draw everything, to be called repeatedly
 {
     //glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
 
@@ -119,7 +123,7 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     //glFlush();
 }
 
-void OGLWidget::resizeGL(int w, int h) // called when window size is changed
+void OGLWidget2::resizeGL(int w, int h) // called when window size is changed
 {
     // adjust viewport transform
     glViewport(0,0,w,h);

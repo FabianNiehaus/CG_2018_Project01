@@ -1,5 +1,5 @@
-#ifndef OGLWIDGET_H
-#define OGLWIDGET_H
+#ifndef OGLWIDGET2_H
+#define OGLWIDGET2_H
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -18,14 +18,14 @@
 using namespace std;
 
 
-class OGLWidget : public QOpenGLWidget,
+class OGLWidget2 : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {
     Q_OBJECT
 
 public:
-    OGLWidget(QWidget *parent = 0);
-    ~OGLWidget();
+    OGLWidget2(QWidget *parent = 0);
+    ~OGLWidget2();
 
 protected:
     void initializeGL();
@@ -39,8 +39,7 @@ private:
     void drawQuad();
 
     bool readSuccess = false;
-
 };
 
 
-#endif // OGLWIDGET_H
+#endif // OGLWIDGET2_H
