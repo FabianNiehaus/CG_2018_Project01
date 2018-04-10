@@ -43,6 +43,8 @@ private:
     void calculateVertexValence();
     void determineQuadNeighbours();
 
+    void printToFile();
+
 };
 
 

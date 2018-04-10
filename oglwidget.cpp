@@ -85,7 +85,7 @@ void OGLWidget::calculateVertexValence()
             if(Vertex::compareVertices(&vertices.at(q.getP4()), &v)) {valence++;}
         }
 
-        v.setEdges(valence);
+        vertices.at(i).setEdges(valence);
 
         cout << "Vertex: " << i << " | Kanten: " << valence << endl;
     }
@@ -140,25 +140,44 @@ void OGLWidget::determineQuadNeighbours()
 
 
                 if(p1Match && p2Match){
-                    q.setN1(j);
+                    quads.at(i).setN1(j);
                     cout << "Quad: " << i << " | Nachbar 1 | Index: " << j << endl;
                 }
                 else if(p2Match && p3Match){
-                    q.setN2(j);
+                    quads.at(i).setN2(j);
                     cout << "Quad: " << i << " | Nachbar 2 | Index: " << j << endl;
                 }
                 else if(p3Match && p4Match){
-                    q.setN3(j);
+                    quads.at(i).setN3(j);
                     cout << "Quad: " << i << " | Nachbar 3 | Index: " << j << endl;
                 }
                 else if(p4Match && p1Match){
-                    q.setN4(j);
+                    quads.at(i).setN4(j);
                     cout << "Quad: " << i << " | Nachbar 4 | Index: " << j << endl;
                 }
 
             }
         }
     }
+}
+
+void OGLWidget::printToFile()
+{
+    ofstream outFile;
+
+    outFile.open("output.obj");
+
+    for(unsigned int i = 0; i < vertices.size(); i++){
+        Vertex v = vertices.at(i);
+        outFile << "v" << " " << v.getX() << " " << v.getY() << " " << v.getZ() << " " << v.getEdges() << endl;;
+    }
+
+    for(unsigned int i = 0; i < quads.size(); i++){
+        Quad q = quads.at(i);
+        outFile << "f" << " " << q.getP1() << " " << q.getP2() << " " << q.getP3() << " " << q.getP4()
+                << " " << q.getN1() << " " << q.getN2() << " " << q.getN3() << " " << q.getN4() << endl;
+    }
+
 }
 
 
@@ -195,6 +214,7 @@ void OGLWidget::initializeGL() // initializations to be called once
     if(readSuccess){
         calculateVertexValence();
         determineQuadNeighbours();
+        printToFile();
     }
 }
 
