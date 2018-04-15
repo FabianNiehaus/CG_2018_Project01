@@ -1,90 +1,60 @@
 #include "quad.h"
 
-Quad::Quad(int p1, int p2, int p3, int p4)
+Quad::Quad(int v0, int v1, int v2, int v3)
 {
-    this->p1 = p1;
-    this->p2 = p2;
-    this->p3 = p3;
-    this->p4 = p4;
+    v[0] = v0;
+    v[1] = v1;
+    v[2] = v2;
+    v[3] = v3;
 }
 
-int Quad::getP1() const
+int Quad::getV(int index) const
 {
-    return p1;
+    if(index > -1 && index < 4) return v[index];
+    else return -1;
 }
 
-void Quad::setP1(int value)
+void Quad::setV(int index, int value)
 {
-    p1 = value;
+    if(index > -1 && index < 4) v[index] = value;
 }
 
-int Quad::getP2() const
+int Quad::getQ(int index) const
 {
-    return p2;
+    if(index > -1 && index < 4) return q[index];
+    else return -1;
 }
 
-void Quad::setP2(int value)
+void Quad::setQ(int index, int value)
 {
-    p2 = value;
+    if(index > -1 && index < 4) q[index] = value;
 }
 
-int Quad::getP3() const
+int Quad::getE(int index) const
 {
-    return p3;
+    if(index > -1 && index < 4) return e[index];
+    else return -1;
 }
 
-void Quad::setP3(int value)
+void Quad::setE(int index, int value)
 {
-    p3 = value;
+    if(index > -1 && index < 4) e[index] = value;
 }
 
-int Quad::getP4() const
+int Quad::getF() const
 {
-    return p4;
+    return f;
 }
 
-void Quad::setP4(int value)
+void Quad::setF(int value)
 {
-    p4 = value;
+    f = value;
 }
 
-int Quad::getN1() const
+string Quad::toString()
 {
-    return n1;
+    return "Eckpunkte: " + to_string(v[0]) + "|" + to_string(v[1]) + "|" + to_string(v[2]) + "|" + to_string(v[3]) + "|"
+            + " # Nachbarn: " + to_string(q[0]) + "|" + to_string(q[1]) + "|" + to_string(q[2]) + "|" + to_string(q[3]);
 }
 
-void Quad::setN1(int value)
-{
-    n1 = value;
-}
-
-int Quad::getN2() const
-{
-    return n2;
-}
-
-void Quad::setN2(int value)
-{
-    n2 = value;
-}
-
-int Quad::getN3() const
-{
-    return n3;
-}
-
-void Quad::setN3(int value)
-{
-    n3 = value;
-}
-
-int Quad::getN4() const
-{
-    return n4;
-}
-
-void Quad::setN4(int value)
-{
-    n4 = value;
-}
 

@@ -18,7 +18,7 @@ bool OGLWidget2::readData()
 
         if(key == "v"){
             file >> x >> y >> z;
-            vertices.push_back(Vertex(x,y,z));
+            vertices.push_back(Vertex(x,y,z,"v"));
         }
 
         if(key == "f"){
@@ -43,14 +43,15 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
         for(unsigned int i=0; i<quads.size();i++){
             Quad q = quads.at(i);
 
-            Vertex v1 = vertices.at(q.getP1());
-            Vertex v2 = vertices.at(q.getP2());
-            Vertex v3 = vertices.at(q.getP3());
-            Vertex v4 = vertices.at(q.getP4());
+            Vertex v0 = vertices.at(q.getV(0));
+            Vertex v1 = vertices.at(q.getV(1));
+            Vertex v2 = vertices.at(q.getV(2));
+            Vertex v3 = vertices.at(q.getV(3));
 
+            /*
             glBegin(GL_LINES);
-                float colorScale = (((float)i+1.0f) / (float)quads.size());
-                glColor3f(1.0 * colorScale, 1.0 * colorScale, 1.0 * colorScale);
+                glVertex3d(v0.getX() * 0.5, v0.getY() * 0.5, v0.getZ() * 0.5);
+                glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
 
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
                 glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
@@ -59,11 +60,33 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
 
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
-                glVertex3d(v4.getX() * 0.5, v4.getY() * 0.5, v4.getZ() * 0.5);
+                glVertex3d(v0.getX() * 0.5, v0.getY() * 0.5, v0.getZ() * 0.5);
+            glEnd();
+            */
 
-                glVertex3d(v4.getX() * 0.5, v4.getY() * 0.5, v4.getZ() * 0.5);
+            QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
+            QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
+            QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
+            QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
+
+            glBegin(GL_QUADS);
+
+                QVector3D vecTemp = QVector3D::crossProduct(vec2-vec1,vec4-vec1);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                glVertex3d(v0.getX() * 0.5, v0.getY() * 0.5, v0.getZ() * 0.5);
+
+                vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
-            glEnd(); // concludes GL_QUADS
+
+                vecTemp = QVector3D::crossProduct(vec2-vec3,vec4-vec3);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
+
+                vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
+            glEnd();
 
         }
     }
@@ -93,7 +116,7 @@ void OGLWidget2::initializeGL() // initializations to be called once
     glDepthFunc(GL_LEQUAL); // *
     glShadeModel(GL_SMOOTH); // *
     glEnable(GL_LIGHT0);
-    //glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // *
@@ -103,24 +126,17 @@ void OGLWidget2::initializeGL() // initializations to be called once
 
 void OGLWidget2::paintGL() // draw everything, to be called repeatedly
 {
-    //glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
-
     // set background color
-    glClearColor(0,0,0,1); // bright blue
+    glClearColor(0,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();				// Reset The Current Modelview Matrix
-    //glTranslated( 0 ,0 , 0.0);     // Move 10 units backwards in z, since camera is at origin
     glRotated( 45, 1, 1, 0);
-    //glScaled( 2.0, 2.0, 2.0);
 
     // draw a cylinder with default resolution
     drawQuad();
-
-    // make it appear (before this, it's hidden in the rear buffer)
-    //glFlush();
 }
 
 void OGLWidget2::resizeGL(int w, int h) // called when window size is changed

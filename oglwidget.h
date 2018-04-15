@@ -44,6 +44,9 @@ private:
     void calculateVertexValence();
     void determineQuadNeighbours();
 
+    void ccSubdivision();
+
+
     void printToFile();
 
 };

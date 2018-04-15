@@ -1,11 +1,14 @@
 #ifndef VERTEX_H
 #define VERTEX_H
 
+#include <string>
+
+using namespace std;
 
 class Vertex
 {
 public:
-    Vertex(float x, float y, float z);
+    Vertex(float x, float y, float z, string type);
     float getX() const;
     void setX(float value);
 
@@ -15,17 +18,32 @@ public:
     float getZ() const;
     void setZ(float value);
 
-    int getEdges() const;
-    void setEdges(int value);
+    int getValence() const;
+    void setValence(int value);
 
     static bool compareVertices(Vertex * v1, Vertex * v2);
 
+    string toString();
+
+    static Vertex * addVertices(Vertex * v1, Vertex * v2);
+    static Vertex * subtractVertices(Vertex * v1, Vertex * v2);
+    static Vertex * multiplyVertex(Vertex * v, float m);
+    static Vertex * divideVertex(Vertex * v, float d);
+
+    string getType() const;
+    void setType(const string &value);
+
 private:
+    // Vektor-Koordinaten
     float x;
     float y;
     float z;
 
-    int edges;
+    // Valenz
+    int n;
+
+    // Typ
+    string type;
 };
 
 #endif // VERTEX_H

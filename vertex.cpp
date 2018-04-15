@@ -1,10 +1,11 @@
 #include "vertex.h"
 
-Vertex::Vertex(float x, float y, float z)
+Vertex::Vertex(float x, float y, float z, string type)
 {
     this->x = x;
     this->y = y;
     this->z = z;
+    this->type = type;
 }
 
 float Vertex::getX() const
@@ -37,14 +38,14 @@ void Vertex::setZ(float value)
     z = value;
 }
 
-int Vertex::getEdges() const
+int Vertex::getValence() const
 {
-    return edges;
+    return n;
 }
 
-void Vertex::setEdges(int value)
+void Vertex::setValence(int value)
 {
-    edges = value;
+    n = value;
 }
 
 bool Vertex::compareVertices(Vertex *v1, Vertex *v2)
@@ -57,4 +58,43 @@ bool Vertex::compareVertices(Vertex *v1, Vertex *v2)
         }
     }
     return false;
+}
+
+string Vertex::toString()
+{
+    string s = "";
+
+    s = "XYZT: " + to_string(x) + "|" + to_string(y) + "|" + to_string(z) + "|" + type;
+
+    return s;
+}
+
+Vertex *Vertex::addVertices(Vertex *v1, Vertex *v2)
+{
+    return new Vertex(v1->getX() + v2->getX(), v1->getY() + v2->getY(), v1->getZ() + v2->getZ(), v1->getType());
+}
+
+Vertex *Vertex::subtractVertices(Vertex *v1, Vertex *v2)
+{
+    return new Vertex(v1->getX() - v2->getX(), v1->getY() - v2->getY(), v1->getZ() - v2->getZ(), v1->getType());
+}
+
+Vertex *Vertex::multiplyVertex(Vertex *v, float m)
+{
+    return new Vertex(v->getX() * m, v->getY() * m, v->getZ() * m, v->getType());
+}
+
+Vertex *Vertex::divideVertex(Vertex *v, float d)
+{
+    return new Vertex(v->getX() / d, v->getY() / d, v->getZ() / d, v->getType());
+}
+
+string Vertex::getType() const
+{
+    return type;
+}
+
+void Vertex::setType(const string &value)
+{
+    type = value;
 }

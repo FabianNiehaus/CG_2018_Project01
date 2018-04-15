@@ -2,51 +2,44 @@
 #define QUAD_H
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
 class Quad
 {
 public:
-    Quad(int p1, int p2, int p3, int p4);
+    Quad(int v0, int v1, int v2, int v3);
 
-    int getP1() const;
-    void setP1(int value);
+    int getV(int index) const;
+    void setV(int index, int value);
 
-    int getP2() const;
-    void setP2(int value);
+    int getQ(int index) const;
+    void setQ(int index, int value);
 
-    int getP3() const;
-    void setP3(int value);
+    int getE(int index) const;
+    void setE(int index, int value);
 
-    int getP4() const;
-    void setP4(int value);
+    int getF() const;
+    void setF(int value);
 
+    int findNeighbour(int index);
 
-    int getN1() const;
-    void setN1(int value);
-
-    int getN2() const;
-    void setN2(int value);
-
-    int getN3() const;
-    void setN3(int value);
-
-    int getN4() const;
-    void setN4(int value);
+    string toString();
 
 private:
-    //Eckpunkte
-    int p1;
-    int p2;
-    int p3;
-    int p4;
+    //Eckpunkt-Indizes
+    int v[4];
 
-    //Nachbarn
-    int n1;
-    int n2;
-    int n3;
-    int n4;
+    //Nachbar-Indizes
+    int q[4];
+
+    //Kantenpunkt-Indizes
+    int e[4];
+
+    //Facepunkt-Index
+    int f;
+
 };
 
 #endif // QUAD_H
