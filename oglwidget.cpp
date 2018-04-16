@@ -124,7 +124,9 @@ void OGLWidget::calculateVertexValence()
 
         v->setValence(valence);
 
+#ifdef DEBUG_VERBOSE
         cout << "Vertex: " << i << " | Kanten: " << valence << endl;
+#endif
     }
 }
 
@@ -137,70 +139,35 @@ void OGLWidget::determineQuadNeighbours()
     cout << endl;
 
     for(unsigned int i = 0; i < quads.size(); i++){
-        Quad q = quads.at(i);
+        Quad * q = & quads.at(i);
 
-        Vertex v1 = vertices.at(q.getV(0));
-        Vertex v2 = vertices.at(q.getV(1));
-        Vertex v3 = vertices.at(q.getV(2));
-        Vertex v4 = vertices.at(q.getV(3));
+        for(int j = 0; j < 4; j++){
 
-        for(unsigned int j= 0; j < quads.size(); j++){
+            int a = q->getV(j % 4);
+            int b = q->getV( (j+1) % 4);
 
-            if(j != i){
-                Quad qTemp = quads.at(j);
+            for(unsigned int k = 0; k < quads.size(); k++){
 
-                bool p1Match = false;
-                bool p2Match = false;
-                bool p3Match = false;
-                bool p4Match = false;
+                if(k != i){
+                    // Nachbarkandidat
+                    Quad * qTemp = & quads.at(k);
 
-                Vertex vTemp1 = vertices.at(qTemp.getV(0));
-                Vertex vTemp2 = vertices.at(qTemp.getV(1));
-                Vertex vTemp3 = vertices.at(qTemp.getV(2));
-                Vertex vTemp4 = vertices.at(qTemp.getV(3));
-
-                if( Vertex::compareVertices(&v1, &vTemp1) ||
-                    Vertex::compareVertices(&v1, &vTemp2) ||
-                    Vertex::compareVertices(&v1, &vTemp3) ||
-                    Vertex::compareVertices(&v1, &vTemp4) ) p1Match = true;
-
-                if( Vertex::compareVertices(&v2, &vTemp1) ||
-                    Vertex::compareVertices(&v2, &vTemp2) ||
-                    Vertex::compareVertices(&v2, &vTemp3) ||
-                    Vertex::compareVertices(&v2, &vTemp4) ) p2Match = true;
-
-                if( Vertex::compareVertices(&v3, &vTemp1) ||
-                    Vertex::compareVertices(&v3, &vTemp2) ||
-                    Vertex::compareVertices(&v3, &vTemp3) ||
-                    Vertex::compareVertices(&v3, &vTemp4) ) p3Match = true;
-
-                if( Vertex::compareVertices(&v4, &vTemp1) ||
-                    Vertex::compareVertices(&v4, &vTemp2) ||
-                    Vertex::compareVertices(&v4, &vTemp3) ||
-                    Vertex::compareVertices(&v4, &vTemp4) ) p4Match = true;
-
-
-                if(p1Match && p2Match){
-                    quads.at(i).setQ(0,j);
-                    cout << "Quad: " << i << " | Nachbar 1 | Index: " << j << endl;
+                    if( (a == qTemp->getV(0) || a == qTemp->getV(1) || a == qTemp->getV(2) || a == qTemp->getV(3))
+                            && (b == qTemp->getV(0) || b == qTemp->getV(1) || b == qTemp->getV(2) || b == qTemp->getV(3)))
+                    {
+                        q->setQ(j, k);
+                    }
                 }
-                else if(p2Match && p3Match){
-                    quads.at(i).setQ(1,j);
-                    cout << "Quad: " << i << " | Nachbar 2 | Index: " << j << endl;
-                }
-                else if(p3Match && p4Match){
-                    quads.at(i).setQ(2,j);
-                    cout << "Quad: " << i << " | Nachbar 3 | Index: " << j << endl;
-                }
-                else if(p4Match && p1Match){
-                    quads.at(i).setQ(3,j);
-                    cout << "Quad: " << i << " | Nachbar 4 | Index: " << j << endl;
-                }
-
             }
         }
     }
+
+#ifdef DEBUG
+    for(unsigned int i = 0; i < quads.size(); i++){
+        cout << quads.at(i).toString() << endl;;
+    }
 }
+#endif
 
 void OGLWidget::ccSubdivision()
 {
@@ -347,8 +314,7 @@ void OGLWidget::ccSubdivision()
         for(int j = 0; j < 4; j++){
             Quad * qNew;
 
-            if(j == 0) qNew = new Quad(q->getQ(j), q->getE(j), q->getF(), q->getE(3));
-            else qNew = new Quad(q->getQ(j), q->getE(j), q->getF(), q->getE(j-1));
+            qNew = new Quad(q->getV(j % 4), q->getE(j % 4), q->getF(), q->getE( (j-1) % 4) );
 
             quadsTemp.push_back(*qNew);
         }
@@ -356,8 +322,8 @@ void OGLWidget::ccSubdivision()
 
     quads = quadsTemp;
 
-    calculateVertexValence();
-    determineQuadNeighbours();
+    //calculateVertexValence();
+    //determineQuadNeighbours();
 
 #ifdef DEBUG
     for(unsigned int i = 0; i < quads.size(); i++){
@@ -421,8 +387,8 @@ void OGLWidget::initializeGL() // initializations to be called once
         calculateVertexValence();
         determineQuadNeighbours();
         ccSubdivision();
-        ccSubdivision();
-        ccSubdivision();
+        //ccSubdivision();
+        //ccSubdivision();
         printToFile();
     }
 }
