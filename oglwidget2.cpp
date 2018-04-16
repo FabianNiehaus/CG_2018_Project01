@@ -71,19 +71,20 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
 
             glBegin(GL_QUADS);
 
-                QVector3D vecTemp = QVector3D::crossProduct(vec2-vec1,vec4-vec1);
+                QVector3D vecTemp = QVector3D::crossProduct(vec3-vec2,vec3-vec1);
+
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v0.getX() * 0.5, v0.getY() * 0.5, v0.getZ() * 0.5);
 
-                vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
+                //vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
 
-                vecTemp = QVector3D::crossProduct(vec2-vec3,vec4-vec3);
+                vecTemp = QVector3D::crossProduct(vec4-vec2,vec4-vec3);
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
 
-                vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
+                //vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
             glEnd();
