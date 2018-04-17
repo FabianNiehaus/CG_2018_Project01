@@ -71,21 +71,21 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
 
             glBegin(GL_QUADS);
 
-                QVector3D vecTemp = QVector3D::crossProduct(vec3-vec2,vec3-vec1);
+                QVector3D vecTemp = QVector3D::crossProduct(vec4-vec2,vec3-vec1);
 
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v0.getX() * 0.5, v0.getY() * 0.5, v0.getZ() * 0.5);
 
                 //vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v1.getX() * 0.5, v1.getY() * 0.5, v1.getZ() * 0.5);
 
-                vecTemp = QVector3D::crossProduct(vec4-vec2,vec4-vec3);
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                //vecTemp = QVector3D::crossProduct(vec4-vec2,vec4-vec3);
+                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v2.getX() * 0.5, v2.getY() * 0.5, v2.getZ() * 0.5);
 
                 //vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v3.getX() * 0.5, v3.getY() * 0.5, v3.getZ() * 0.5);
             glEnd();
 
@@ -113,12 +113,19 @@ void OGLWidget2::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
 
     glClearColor(0,0,0,1);
+
     glEnable(GL_DEPTH_TEST);
+
     glDepthFunc(GL_LEQUAL); // *
-    glShadeModel(GL_SMOOTH); // *
+    glShadeModel(GL_FLAT); // *
+
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+
+    glEnable(GL_NORMALIZE);
     glEnable(GL_LIGHTING);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
     glEnable(GL_COLOR_MATERIAL);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // *
 

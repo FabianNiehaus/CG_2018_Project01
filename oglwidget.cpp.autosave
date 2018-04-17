@@ -373,7 +373,7 @@ void OGLWidget::ccSubdivision()
 
             Vertex * v_t4 = Vertex::addVertices(v_t2, v_t3); // (4 * e_v - f_v) + (v * n_v * (n_v - 2))
 
-            Vertex * v_new = new Vertex::divideVertex(v_t4, n_v * n_v); // (1/n_v^2) * ((4 * e_v - f_v) + (v * n_v * (n_v - 2)))
+            Vertex * v_new = Vertex::divideVertex(v_t4, n_v * n_v); // (1/n_v^2) * ((4 * e_v - f_v) + (v * n_v * (n_v - 2)))
 
             v_new->setType("v");
 

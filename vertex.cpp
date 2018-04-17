@@ -62,11 +62,7 @@ bool Vertex::compareVertices(Vertex *v1, Vertex *v2)
 
 string Vertex::toString()
 {
-    string s = "";
-
-    s = "XYZT: " + to_string(x) + "|" + to_string(y) + "|" + to_string(z) + "|" + type;
-
-    return s;
+    return "XYZT: " + to_string(x) + "|" + to_string(y) + "|" + to_string(z) + "|" + type;
 }
 
 Vertex *Vertex::addVertices(Vertex *v1, Vertex *v2)
