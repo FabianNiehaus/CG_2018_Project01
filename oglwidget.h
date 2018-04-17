@@ -36,8 +36,8 @@ protected:
     void paintGL();
 
 private:
-    vector<Vertex *> vertices;
-    vector<Quad *> quads;
+    vector<Vertex> vertices;
+    vector<Quad> quads;
     bool readData();
     void drawQuad();
 

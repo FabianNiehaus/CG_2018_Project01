@@ -21,17 +21,17 @@ public:
     int getValence() const;
     void setValence(int value);
 
-    static bool compareVertices(Vertex * v1, Vertex * v2);
+    static bool compareVertices(Vertex  v1, Vertex  v2);
 
     string toString();
 
-    static Vertex * addVertices(Vertex * v1, Vertex * v2);
-    static Vertex * subtractVertices(Vertex * v1, Vertex * v2);
-    static Vertex * multiplyVertex(Vertex * v, float m);
-    static Vertex * divideVertex(Vertex * v, float d);
+    static Vertex  addVertices(Vertex  v1, Vertex  v2);
+    static Vertex  subtractVertices(Vertex  v1, Vertex  v2);
+    static Vertex  multiplyVertex(Vertex  v, float m);
+    static Vertex  divideVertex(Vertex  v, float d);
 
-    static Vertex * averageVertices(Vertex * v1, Vertex * v2);
-    static Vertex * averageVertices(Vertex * v1, Vertex * v2, Vertex * v3);
+    static Vertex  averageVertices(Vertex  v1, Vertex  v2);
+    static Vertex  averageVertices(Vertex  v1, Vertex  v2, Vertex  v3);
 
     string getType() const;
     void setType(const string &value);

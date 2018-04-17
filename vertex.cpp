@@ -48,11 +48,11 @@ void Vertex::setValence(int value)
     n = value;
 }
 
-bool Vertex::compareVertices(Vertex *v1, Vertex *v2)
+bool Vertex::compareVertices(Vertex v1, Vertex v2)
 {
-    if(v1->getX() == v2->getX()){
-        if(v1->getY() == v2->getY()){
-            if(v1->getZ() == v2->getZ()){
+    if(v1.getX() == v2.getX()){
+        if(v1.getY() == v2.getY()){
+            if(v1.getZ() == v2.getZ()){
                 return true;
             }
         }
@@ -65,36 +65,36 @@ string Vertex::toString()
     return "XYZT: " + to_string(x) + "|" + to_string(y) + "|" + to_string(z) + "|" + type;
 }
 
-Vertex *Vertex::addVertices(Vertex *v1, Vertex *v2)
+Vertex Vertex::addVertices(Vertex v1, Vertex v2)
 {
-    return new Vertex(v1->getX() + v2->getX(), v1->getY() + v2->getY(), v1->getZ() + v2->getZ(), v1->getType());
+    return  Vertex(v1.getX() + v2.getX(), v1.getY() + v2.getY(), v1.getZ() + v2.getZ(), v1.getType());
 }
 
-Vertex *Vertex::subtractVertices(Vertex *v1, Vertex *v2)
+Vertex Vertex::subtractVertices(Vertex v1, Vertex v2)
 {
-    return new Vertex(v1->getX() - v2->getX(), v1->getY() - v2->getY(), v1->getZ() - v2->getZ(), v1->getType());
+    return  Vertex(v1.getX() - v2.getX(), v1.getY() - v2.getY(), v1.getZ() - v2.getZ(), v1.getType());
 }
 
-Vertex *Vertex::multiplyVertex(Vertex *v, float m)
+Vertex Vertex::multiplyVertex(Vertex v, float m)
 {
-    return new Vertex(v->getX() * m, v->getY() * m, v->getZ() * m, v->getType());
+    return  Vertex(v.getX() * m, v.getY() * m, v.getZ() * m, v.getType());
 }
 
-Vertex *Vertex::divideVertex(Vertex *v, float d)
+Vertex Vertex::divideVertex(Vertex v, float d)
 {
-    return new Vertex(v->getX() / d, v->getY() / d, v->getZ() / d, v->getType());
+    return  Vertex(v.getX() / d, v.getY() / d, v.getZ() / d, v.getType());
 }
 
-Vertex *Vertex::averageVertices(Vertex *v1, Vertex *v2)
+Vertex Vertex::averageVertices(Vertex v1, Vertex v2)
 {
-    Vertex * v_temp = new Vertex(v1->getX() + v2->getX(), v1->getY() + v2->getY(), v1->getZ() + v2->getZ(), v1->getType());
-    return new Vertex (v_temp->getX() / 2, v_temp->getY() / 2, v_temp->getZ() / 2, v1->getType());
+    Vertex  v_temp =  Vertex(v1.getX() + v2.getX(), v1.getY() + v2.getY(), v1.getZ() + v2.getZ(), v1.getType());
+    return  Vertex (v_temp.getX() / 2, v_temp.getY() / 2, v_temp.getZ() / 2, v1.getType());
 }
 
-Vertex *Vertex::averageVertices(Vertex *v1, Vertex *v2, Vertex *v3)
+Vertex Vertex::averageVertices(Vertex v1, Vertex v2, Vertex v3)
 {
-    Vertex * v_temp = new Vertex(v1->getX() + v2->getX() + v3->getX(), v1->getY() + v2->getY() + v3->getY(), v1->getZ() + v2->getZ() + v3->getZ(), v1->getType());
-    return new Vertex (v_temp->getX() / 3, v_temp->getY() / 3, v_temp->getZ() / 3, v1->getType());
+    Vertex  v_temp =  Vertex(v1.getX() + v2.getX() + v3.getX(), v1.getY() + v2.getY() + v3.getY(), v1.getZ() + v2.getZ() + v3.getZ(), v1.getType());
+    return  Vertex (v_temp.getX() / 3, v_temp.getY() / 3, v_temp.getZ() / 3, v1.getType());
 }
 
 string Vertex::getType() const
