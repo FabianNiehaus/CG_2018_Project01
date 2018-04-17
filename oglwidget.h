@@ -16,6 +16,8 @@
 #include "vertex.h"
 #include "quad.h"
 
+#include <cmath>
+
 using namespace std;
 
 
@@ -34,8 +36,8 @@ protected:
     void paintGL();
 
 private:
-    vector<Vertex> vertices;
-    vector<Quad> quads;
+    vector<Vertex *> vertices;
+    vector<Quad *> quads;
     bool readData();
     void drawQuad();
 

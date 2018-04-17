@@ -30,6 +30,9 @@ public:
     static Vertex * multiplyVertex(Vertex * v, float m);
     static Vertex * divideVertex(Vertex * v, float d);
 
+    static Vertex * averageVertices(Vertex * v1, Vertex * v2);
+    static Vertex * averageVertices(Vertex * v1, Vertex * v2, Vertex * v3);
+
     string getType() const;
     void setType(const string &value);
 
