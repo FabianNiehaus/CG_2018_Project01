@@ -2,6 +2,8 @@
 
 #define DEBUG
 
+int alpha = 0;
+
 bool OGLWidget::readData()
 {
     ifstream file("cube.obj");
@@ -32,72 +34,10 @@ bool OGLWidget::readData()
 
     file.close();
 
+    cout << endl;
     cout << "Objekt-Datei eingelesen!" << endl;
     return true;
 }
-
-void OGLWidget::drawQuad() // drawing a quad in OpenGL
-{
-    if(readSuccess){
-
-        cout << endl;
-        cout << "Zeichne Quads!" << endl;
-        cout << endl;
-
-        for(unsigned int i=0; i<quads.size();i++){
-            Quad  q = quads.at(i);
-
-            Vertex  v0 = vertices.at(q.getV(0));
-            Vertex  v1 = vertices.at(q.getV(1));
-            Vertex  v2 = vertices.at(q.getV(2));
-            Vertex  v3 = vertices.at(q.getV(3));
-
-            QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
-            QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
-            QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
-            QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
-
-            /*
-            glBegin(GL_LINES);
-                glColor3f(0.0f, 0.0f, 1.f);
-
-                glVertex3d(v0.getX(), v0.getY(), v0.getZ());
-                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
-
-                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
-                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
-
-                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
-                glVertex3d(v3.getX(), v3.getY(), v3.getZ());
-
-                glVertex3d(v3.getX(), v3.getY(), v3.getZ());
-                glVertex3d(v0.getX()*  0.5, v0.getY(), v0.getZ());
-            glEnd();
-            */
-
-            glBegin(GL_QUADS);
-
-                QVector3D vecTemp = QVector3D::crossProduct(vec3-vec1,vec4-vec2);
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
-                glVertex3d(v0.getX(), v0.getY(), v0.getZ());
-
-                //vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
-                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
-
-                //vecTemp = QVector3D::crossProduct(vec2-vec3,vec4-vec3);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
-                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
-
-                //vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
-                glVertex3d(v3.getX(), v3.getY(), v3.getZ() * 0.5);
-            glEnd();
-
-        }
-    }
-}
-
 
 // Immer positive Modulos: https://stackoverflow.com/questions/14997165/fastest-way-to-get-a-positive-modulo-in-c-c
 inline int pos_mod(int i, int n) {
@@ -108,7 +48,6 @@ void OGLWidget::calculateVertexValence()
 {
     cout << endl;
     cout << "Bestimme Vertex-Valenzen" << endl;
-    cout << endl;
 
     for(unsigned int i = 0; i < vertices.size(); i++)
     {
@@ -122,10 +61,10 @@ void OGLWidget::calculateVertexValence()
 
             //cout << "Quad: " << j << endl;
 
-            if(Vertex::compareVertices(vertices.at(q.getV(0)), v)) {valence++;}
-            if(Vertex::compareVertices(vertices.at(q.getV(1)), v)) {valence++;}
-            if(Vertex::compareVertices(vertices.at(q.getV(2)), v)) {valence++;}
-            if(Vertex::compareVertices(vertices.at(q.getV(3)), v)) {valence++;}
+            for(int k = 0; k < 4; k++){
+                if(q.getV(k) == i) valence++;
+            }
+
         }
 
         vertices.at(i).setValence(valence);
@@ -142,7 +81,6 @@ void OGLWidget::determineQuadNeighbours()
 {
     cout << endl;
     cout << "Bestimme Nachbarn!" << endl;
-    cout << endl;
 
     for(unsigned int i = 0; i < quads.size(); i++){
         Quad  q = quads.at(i);
@@ -168,19 +106,15 @@ void OGLWidget::determineQuadNeighbours()
         }
     }
 
-#ifdef DEBUG
+#ifdef DEBUG_VERBOSE
     for(unsigned int i = 0; i < quads.size(); i++){
-        cout << quads.at(i).toString() << endl;;
+        cout << quads.at(i).toString() << endl;
     }
-}
 #endif
 
-void OGLWidget::ccSubdivision()
-{
-    cout << endl;
-    cout << "Starte Catmull-Clark-Subdivision!" <<endl;
-    cout << endl;
+}
 
+void OGLWidget::calculateFaceMasks(){
     // Berechne Face-Mask f für jeden Quad
     for(unsigned int i = 0; i < quads.size(); i++){
         Quad  q = quads.at(i);
@@ -206,6 +140,9 @@ void OGLWidget::ccSubdivision()
 #endif
     }
 
+}
+
+void OGLWidget::calculateEdgeMasks(){
     // Berechne Edge-Masks e_j für jeden Quad
     for(unsigned int i = 0; i < quads.size(); i++){
         Quad  q = quads.at(i);
@@ -259,18 +196,18 @@ void OGLWidget::ccSubdivision()
         cout << "Quad: " << i << " | Edge-Indizes: " << qTemp.getE(0) << "|" << qTemp.getE(1) << "|" << qTemp.getE(2) << "|" << qTemp.getE(3) << endl;
 #endif
     }
+}
 
+void OGLWidget::calculateVertexMasks(){
     /* START: Berechne Vertex-Masks */
 
     // Jeden v-Vertex mal Valenz * (Valenz - 3) multiplizieren
     for(unsigned int i = 0; i < vertices.size(); i++){
-        Vertex  v_in =  vertices.at(i);
+        Vertex  v =  vertices.at(i);
 
-        if(v_in.getType() == "v"){
-            int n = v_in.getValence();
-            Vertex v_out = Vertex::multiplyVertex(v_in, n * (n - 3) );
-            v_out.setValence(n);
-            vertices.at(i) = v_out;
+        if(v.getType() == "v"){
+            int n = v.getValence();
+            vertices.at(i) = Vertex::multiplyVertex(v, n * (n - 3) );
         }
     }
 
@@ -294,21 +231,17 @@ void OGLWidget::ccSubdivision()
 
             Vertex v_out = Vertex::subtractVertices(v_2, vertices.at(q.getF()));
 
-            v_out.setValence(valence);
-
             vertices.at(q.getV(j)) = v_out;
         }
     }
 
     // Jeden v-Vertex durch seine Valenz teilen
     for(unsigned int i = 0; i < vertices.size(); i++){
-        Vertex  v_in =  vertices.at(i);
+        Vertex  v =  vertices.at(i);
 
-        if(v_in.getType() == "v"){
-            int n = v_in.getValence();
-            Vertex v_out = Vertex::divideVertex(v_in, n * n);
-            v_out.setValence(n);
-            vertices.at(i) = v_out;
+        if(v.getType() == "v"){
+            int n = v.getValence();
+            vertices.at(i) = Vertex::divideVertex(v, n * n);
         }
 
 #ifdef DEBUG_VERBOSE
@@ -318,15 +251,27 @@ void OGLWidget::ccSubdivision()
 
     /* ENDE: Berechne Vertex-Masks */
 
+}
 
-
+void OGLWidget::subdivideAndReconnectMesh(){
     // Subdivision . Aus jedem Quad vier entsprechende machen
     vector<Quad > quadsTemp;
     for(unsigned int i = 0; i < quads.size(); i++){
         Quad q = quads.at(i);
 
         for(int j = 0; j < 4; j++){
-            Quad q_new = Quad(q.getV( pos_mod(j,4) ), q.getE( pos_mod(j,4) ), q.getF(), q.getE( pos_mod(j-1,4) ));
+
+            int v0 = q.getV( pos_mod(j,4) );
+            int v1 = q.getE( pos_mod(j-1,4) );
+            int v2 = q.getF();
+            int v3 = q.getE( pos_mod(j,4) );
+
+            vertices.at(v0).setType("v");
+            vertices.at(v1).setType("v");
+            vertices.at(v2).setType("v");
+            vertices.at(v3).setType("v");
+
+            Quad q_new = Quad(v0, v1, v2, v3);
 
             quadsTemp.push_back(q_new);
         }
@@ -336,13 +281,55 @@ void OGLWidget::ccSubdivision()
 
     calculateVertexValence();
     determineQuadNeighbours();
+}
 
-#ifdef DEBUG
+void OGLWidget::printQuads(bool postCC){
+    cout << endl;
+    cout << "Gebe Quads aus!" << endl;
     for(unsigned int i = 0; i < quads.size(); i++){
-        cout << quads.at(i).toString() << endl;
-    }
-#endif
+        Quad q = quads.at(i);
 
+        cout << "##########" << endl;
+        cout << "Quad: " << i << endl;
+        cout << " -- " << endl;
+        cout << "v0: " << q.getV(0) << " | " << vertices.at(q.getV(0)).toString() << endl;
+        cout << "v1: " << q.getV(1) << " | " << vertices.at(q.getV(1)).toString() << endl;
+        cout << "v2: " << q.getV(2) << " | " << vertices.at(q.getV(2)).toString() << endl;
+        cout << "v3: " << q.getV(3) << " | " << vertices.at(q.getV(3)).toString() << endl;
+        cout << " -- " << endl;
+
+        if(postCC){
+            cout << "f: " <<  q.getF() << " | " << vertices.at(q.getF()).toString() << endl;
+            cout << " -- " << endl;
+            cout << "e0: " << q.getE(0) << " | " << vertices.at(q.getE(0)).toString() << endl;
+            cout << "e1: " << q.getE(1) << " | " << vertices.at(q.getE(1)).toString() << endl;
+            cout << "e2: " << q.getE(2) << " | " << vertices.at(q.getE(2)).toString() << endl;
+            cout << "e3: " << q.getE(3) << " | " << vertices.at(q.getE(3)).toString() << endl;
+            cout << " -- " << endl;
+        }
+
+        cout << "q0: " << q.getQ(0) << endl;
+        cout << "q1: " << q.getQ(1) << endl;
+        cout << "q2: " << q.getQ(2) << endl;
+        cout << "q3: " << q.getQ(3) << endl;
+        cout << " -- " << endl;
+
+    }
+
+}
+
+void OGLWidget::ccSubdivision()
+{
+    cout << endl;
+    cout << "Starte Catmull-Clark-Subdivision!" <<endl;
+    cout << endl;
+
+    calculateFaceMasks();
+    calculateEdgeMasks();
+    calculateVertexMasks();
+    printQuads(true);
+    subdivideAndReconnectMesh();
+    printQuads(false);
 }
 
 void OGLWidget::printToFile()
@@ -353,7 +340,7 @@ void OGLWidget::printToFile()
 
     for(unsigned int i = 0; i < vertices.size(); i++){
         Vertex  v = vertices.at(i);
-        outFile << "v" << " " << v.getX() << " " << v.getY() << " " << v.getZ() << " " << v.getValence() << endl;;
+        outFile << "v" << " " << v.getX() << " " << v.getY() << " " << v.getZ() << " " << v.getValence() << endl;
     }
 
     for(unsigned int i = 0; i < quads.size(); i++){
@@ -368,12 +355,25 @@ void OGLWidget::printToFile()
 OGLWidget::OGLWidget(QWidget *parent) // constructor
     : QOpenGLWidget(parent)
 {
+    // Setup the animation timer to fire every x msec
+        animtimer = new QTimer(this);
+        animtimer->start( 50 );
 
+        // Everytime the timer fires, the animation is going one step forward
+        connect(animtimer, SIGNAL(timeout()), this, SLOT(stepAnimation()));
+
+        animstep = 0;
 }
 
 OGLWidget::~OGLWidget() // destructor
 {
 
+}
+
+void OGLWidget::stepAnimation()
+{
+    animstep++;    // Increase animation steps
+    update();      // Trigger redraw of scene with paintGL
 }
 
 // define material color properties for front and back side
@@ -436,19 +436,49 @@ void OGLWidget::InitLightingAndProjection() // to be executed once before drawin
     //glFrustum( -10, 10, -8, 8, 2, 20); // perspective projektion
 }
 
+void OGLWidget::drawQuad() // drawing a quad in OpenGL
+{
+    if(readSuccess){
+
+        /*
+        cout << endl;
+        cout << "Zeichne Quads!" << endl;
+        */
+
+        for(unsigned int i=0; i<quads.size();i++){
+            Quad  q = quads.at(i);
+
+            Vertex  v0 = vertices.at(q.getV(0));
+            Vertex  v1 = vertices.at(q.getV(1));
+            Vertex  v2 = vertices.at(q.getV(2));
+            Vertex  v3 = vertices.at(q.getV(3));
+
+            QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
+            QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
+            QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
+            QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
+
+            glBegin(GL_QUADS);
+
+                QVector3D vecTemp = QVector3D::crossProduct(vec3-vec1,vec4-vec2);
+                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+
+                glVertex3d(v0.getX(), v0.getY(), v0.getZ());
+                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
+                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
+                glVertex3d(v3.getX(), v3.getY(), v3.getZ());
+
+            glEnd();
+
+        }
+    }
+}
+
 void OGLWidget::initializeGL() // initializations to be called once
 {
-    // * https://www.ntu.edu.sg/home/ehchua/programming/opengl/CG_Examples.html
 
     initializeOpenGLFunctions();
     InitLightingAndProjection();
-
-    glClearColor(0,0,0,1);
-    glEnable(GL_DEPTH_TEST);
-
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); //
 
     readSuccess = readData();
 
@@ -456,8 +486,10 @@ void OGLWidget::initializeGL() // initializations to be called once
         calculateVertexValence();
         determineQuadNeighbours();
         ccSubdivision();
-        //ccSubdivision();
-        //ccSubdivision();
+        ccSubdivision();
+        ccSubdivision();
+        ccSubdivision();
+        ccSubdivision();
         printToFile();
     }
 }
@@ -467,7 +499,7 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
 
     // set background color
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(1, 1, 1, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
@@ -475,11 +507,11 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     glLoadIdentity();				// Reset The Current Modelview Matrix
     glTranslated( 0 ,0 ,-10.0);     // Move 10 units backwards in z, since camera is at origin
     glScaled( 5.0, 5.0, 5.0);       // scale objects
-    glRotated( 45, 1, 1, 0);     // continuous rotation
-    //alpha += 5;
+    glRotated( alpha, 0, 3, 1);     // continuous rotation
+    alpha += 2;
 
     // define color: 1=front, 2=back, 3=both, followed by r, g, and b
-    SetMaterialColor( 1, 1.0, .2, .2);  // front color is red
+    SetMaterialColor( 1, 1.0, 0.2, .2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
 
     // draw a cylinder with default resolution

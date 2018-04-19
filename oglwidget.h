@@ -30,6 +30,9 @@ public:
     OGLWidget(QWidget *parent = 0);
     ~OGLWidget();
 
+public slots:
+    void stepAnimation();
+
 protected:
     void initializeGL();
     void resizeGL(int w, int h);
@@ -37,6 +40,9 @@ protected:
 
     void SetMaterialColor( int side, float r, float g, float b);
     void InitLightingAndProjection();
+
+    QTimer* animtimer; // Timer needed to step animation every x msec
+    int animstep;      // Current animation step (used to rotate triangle
 
 private:
     vector<Vertex> vertices;
@@ -53,6 +59,12 @@ private:
 
 
     void printToFile();
+
+    void calculateFaceMasks();
+    void calculateEdgeMasks();
+    void calculateVertexMasks();
+    void subdivideAndReconnectMesh();
+    void printQuads(bool postCC);
 
 };
 

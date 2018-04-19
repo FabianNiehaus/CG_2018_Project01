@@ -30,15 +30,16 @@ bool OGLWidget2::readData()
 
     file.close();
 
-    cout << "Objekt-Datei eingelesen!" << endl;
+    cout << "[W2] Objekt-Datei eingelesen!" << endl;
     return true;
 }
 
 void OGLWidget2::drawQuad() // drawing a quad in OpenGL
 {
     if(readSuccess){
-
-        cout << "Zeichne Lines" << endl;
+        /*
+        cout << "[W2] Zeichne Lines" << endl;
+        */
 
         for(unsigned int i=0; i<quads.size();i++){
             Quad q = quads.at(i);

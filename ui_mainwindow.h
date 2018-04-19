@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -28,6 +29,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
+    QHBoxLayout *horizontalLayout;
     OGLWidget *openGLWidget;
     OGLWidget2 *openGLWidget_2;
     QMenuBar *menuBar;
@@ -41,12 +43,20 @@ public:
         MainWindow->resize(961, 496);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        horizontalLayout = new QHBoxLayout(centralWidget);
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         openGLWidget = new OGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setGeometry(QRect(10, 10, 461, 421));
+
+        horizontalLayout->addWidget(openGLWidget);
+
         openGLWidget_2 = new OGLWidget2(centralWidget);
         openGLWidget_2->setObjectName(QStringLiteral("openGLWidget_2"));
-        openGLWidget_2->setGeometry(QRect(490, 10, 461, 421));
+
+        horizontalLayout->addWidget(openGLWidget_2);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));

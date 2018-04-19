@@ -9,6 +9,8 @@ class Vertex
 {
 public:
     Vertex(float x, float y, float z, string type);
+    Vertex(float x, float y, float z, int valence, string type);
+
     float getX() const;
     void setX(float value);
 
