@@ -78,6 +78,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 *.34b7661
-Project1.pro.user
 *.user
-Project1.pro.user
+debug/*
+release/*
+*Makefile*

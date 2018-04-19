@@ -82,7 +82,8 @@ Vertex Vertex::multiplyVertex(Vertex v, float m)
 
 Vertex Vertex::divideVertex(Vertex v, float d)
 {
-    return  Vertex(v.getX() / d, v.getY() / d, v.getZ() / d, v.getType());
+    Vertex v_r = Vertex(v.getX() / d, v.getY() / d, v.getZ() / d, v.getType());
+    return  v_r;
 }
 
 Vertex Vertex::averageVertices(Vertex v1, Vertex v2)
@@ -95,6 +96,12 @@ Vertex Vertex::averageVertices(Vertex v1, Vertex v2, Vertex v3)
 {
     Vertex  v_temp =  Vertex(v1.getX() + v2.getX() + v3.getX(), v1.getY() + v2.getY() + v3.getY(), v1.getZ() + v2.getZ() + v3.getZ(), v1.getType());
     return  Vertex (v_temp.getX() / 3, v_temp.getY() / 3, v_temp.getZ() / 3, v1.getType());
+}
+
+Vertex Vertex::averageVertices(Vertex v1, Vertex v2, Vertex v3, Vertex v4)
+{
+    Vertex  v_temp =  Vertex(v1.getX() + v2.getX() + v3.getX() + v4.getX(), v1.getY() + v2.getY() + v3.getY() + v4.getY(), v1.getZ() + v2.getZ() + v3.getZ() + v4.getZ(), v1.getType());
+    return  Vertex (v_temp.getX() / 4, v_temp.getY() / 4, v_temp.getZ() / 4, v1.getType());
 }
 
 string Vertex::getType() const

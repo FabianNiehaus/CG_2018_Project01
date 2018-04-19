@@ -32,6 +32,7 @@ public:
 
     static Vertex  averageVertices(Vertex  v1, Vertex  v2);
     static Vertex  averageVertices(Vertex  v1, Vertex  v2, Vertex  v3);
+    static Vertex  averageVertices(Vertex  v1, Vertex  v2, Vertex  v3, Vertex v4);
 
     string getType() const;
     void setType(const string &value);

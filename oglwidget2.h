@@ -33,6 +33,9 @@ protected:
     void resizeGL(int w, int h);
     void paintGL();
 
+    void SetMaterialColor( int side, float r, float g, float b);
+    void InitLightingAndProjection();
+
 private:
     vector<Vertex> vertices;
     vector<Quad> quads;
