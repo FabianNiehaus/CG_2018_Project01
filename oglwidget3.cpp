@@ -151,8 +151,8 @@ void OGLWidget3::paintGL() // draw everything, to be called repeatedly
     glLoadIdentity();				// Reset The Current Modelview Matrix
     glTranslated( 0 ,0 ,-5.0);     // Move 10 units backwards in z, since camera is at origin
     glScaled( 5.0, 5.0, 5.0);       // scale objects
-    glRotated( alpha, 0, 3, 1);     // continuous rotation
-    alpha += 2;
+    glRotated( alpha, 3, 1, 0);     // continuous rotation
+    alpha += 7;
 
     // define color: 1=front, 2=back, 3=both, followed by r, g, and b
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
