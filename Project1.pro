@@ -33,14 +33,16 @@ SOURCES += \
     vertex.cpp \
     quad.cpp \
     oglwidget.cpp \
-    oglwidget2.cpp
+    oglwidget2.cpp \
+    oglwidget3.cpp
 
 HEADERS += \
         mainwindow.h \
     vertex.h \
     quad.h \
     oglwidget.h \
-    oglwidget2.h
+    oglwidget2.h \
+    oglwidget3.h
 
 FORMS += \
         mainwindow.ui

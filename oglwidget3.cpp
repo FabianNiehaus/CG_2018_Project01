@@ -1,6 +1,6 @@
-#include "oglwidget2.h"
+#include "oglwidget3.h"
 
-bool OGLWidget2::readData()
+bool OGLWidget3::readData()
 {
     ifstream file("cube.obj");
 
@@ -30,16 +30,13 @@ bool OGLWidget2::readData()
 
     file.close();
 
-    cout << "[W2] Objekt-Datei eingelesen!" << endl;
+    cout << "[W3] Objekt-Datei eingelesen!" << endl;
     return true;
 }
 
-void OGLWidget2::drawQuad() // drawing a quad in OpenGL
+void OGLWidget3::drawQuad() // drawing a quad in OpenGL
 {
     if(readSuccess){
-        /*
-        cout << "[W2] Zeichne Lines" << endl;
-        */
 
         for(unsigned int i=0; i<quads.size();i++){
             Quad q = quads.at(i);
@@ -49,29 +46,20 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
             Vertex v2 = vertices.at(q.getV(2));
             Vertex v3 = vertices.at(q.getV(3));
 
-            QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
-            QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
-            QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
-            QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
+            glBegin(GL_LINES);
+                glColor3f(0.0,0.0,0.0);
 
-            glBegin(GL_QUADS);
-
-                QVector3D vecTemp = QVector3D::crossProduct(vec4-vec2,vec3-vec1);
-
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v0.getX(), v0.getY(), v0.getZ());
-
-                //vecTemp = QVector3D::crossProduct(vec1-vec2,vec3-vec2);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
                 glVertex3d(v1.getX(), v1.getY(), v1.getZ());
 
-                //vecTemp = QVector3D::crossProduct(vec4-vec2,vec4-vec3);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
                 glVertex3d(v2.getX(), v2.getY(), v2.getZ());
 
-                //vecTemp = QVector3D::crossProduct(vec3-vec4,vec1-vec4);
-                //glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
                 glVertex3d(v3.getX(), v3.getY(), v3.getZ());
+
+                glVertex3d(v3.getX(), v3.getY(), v3.getZ());
+                glVertex3d(v0.getX(), v0.getY(), v0.getZ());
             glEnd();
 
         }
@@ -79,7 +67,7 @@ void OGLWidget2::drawQuad() // drawing a quad in OpenGL
 }
 
 
-OGLWidget2::OGLWidget2(QWidget *parent) // constructor
+OGLWidget3::OGLWidget3(QWidget *parent) // constructor
     : QOpenGLWidget(parent)
 {
     // Setup the animation timer to fire every x msec
@@ -92,19 +80,19 @@ OGLWidget2::OGLWidget2(QWidget *parent) // constructor
         animstep = 0;
 }
 
-OGLWidget2::~OGLWidget2() // destructor
+OGLWidget3::~OGLWidget3() // destructor
 {
 
 }
 
-void OGLWidget2::stepAnimation()
+void OGLWidget3::stepAnimation()
 {
     animstep++;    // Increase animation steps
     update();      // Trigger redraw of scene with paintGL
 }
 
 // define material color properties for front and back side
-void OGLWidget2::SetMaterialColor( int side, float r, float g, float b){
+void OGLWidget3::SetMaterialColor( int side, float r, float g, float b){
     float	amb[4], dif[4], spe[4];
     int	i, mat;
 
@@ -128,50 +116,29 @@ void OGLWidget2::SetMaterialColor( int side, float r, float g, float b){
 }
 
 // initialize Open GL lighting and projection matrix
-void OGLWidget2::InitLightingAndProjection() // to be executed once before drawing
+void OGLWidget3::InitLightingAndProjection() // to be executed once before drawing
 {
-    // light positions and colors
-    GLfloat LightPosition1[4] = { 10, 5, 10,  0};
-    GLfloat LightPosition2[4] = { -5, 5, -10,  0};
-    GLfloat ColorRedish[4] = { 1.0,  .8,  .8,  1}; // white with a little bit of red
-    GLfloat ColorBlueish[4] = { .8,  .8,  1.0,  1};// white with a little bit of blue
 
     glEnable( GL_DEPTH_TEST); // switch on z-buffer
     glDepthFunc( GL_LESS);
 
-    glShadeModel( GL_SMOOTH); // Gouraud shading
-
-    glEnable( GL_LIGHTING); // use lighting
-    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, 1); // draw both sides
-
-    // define and switch on light 0
-    glLightfv( GL_LIGHT0, GL_POSITION, LightPosition1);
-    glLightfv( GL_LIGHT0, GL_DIFFUSE,  ColorRedish);
-    glLightfv( GL_LIGHT0, GL_SPECULAR, ColorRedish);
-    glEnable( GL_LIGHT0);
-
-    // define and switch on light 1
-    glLightfv( GL_LIGHT1, GL_POSITION, LightPosition2);
-    glLightfv( GL_LIGHT1, GL_DIFFUSE,  ColorBlueish);
-    glLightfv( GL_LIGHT1, GL_SPECULAR, ColorBlueish);
-    glEnable( GL_LIGHT1);
+    glShadeModel( GL_FLAT);
 
     glMatrixMode( GL_PROJECTION); // define camera projection
     glLoadIdentity(); // reset matrix to identity (otherwise existing matrix will be multiplied with)
     glOrtho( -15, 15, -15, 15, -15, 15); // orthogonal projection (xmin xmax ymin ymax zmin zmax)
-    //glFrustum( -10, 10, -8, 8, 2, 20); // perspective projektion
+
 }
 
-void OGLWidget2::initializeGL() // initializations to be called once
+void OGLWidget3::initializeGL() // initializations to be called once
 {
-
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
     readSuccess = readData();
 }
 
-void OGLWidget2::paintGL() // draw everything, to be called repeatedly
+void OGLWidget3::paintGL() // draw everything, to be called repeatedly
 {
     glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
 
@@ -182,7 +149,7 @@ void OGLWidget2::paintGL() // draw everything, to be called repeatedly
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
     glLoadIdentity();				// Reset The Current Modelview Matrix
-    glTranslated( 0 ,0 ,-10.0);     // Move 10 units backwards in z, since camera is at origin
+    glTranslated( 0 ,0 ,-5.0);     // Move 10 units backwards in z, since camera is at origin
     glScaled( 5.0, 5.0, 5.0);       // scale objects
     glRotated( alpha, 0, 3, 1);     // continuous rotation
     alpha += 2;
@@ -198,7 +165,7 @@ void OGLWidget2::paintGL() // draw everything, to be called repeatedly
     glFlush();
 }
 
-void OGLWidget2::resizeGL(int w, int h) // called when window size is changed
+void OGLWidget3::resizeGL(int w, int h) // called when window size is changed
 {
     // adjust viewport transform
     glViewport(0,0,w,h);

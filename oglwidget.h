@@ -50,13 +50,14 @@ private:
     bool readData();
     void drawQuad();
 
+    int alpha = 0;
+
     bool readSuccess = false;
 
     void calculateVertexValence();
     void determineQuadNeighbours();
 
     void ccSubdivision();
-
 
     void printToFile();
 

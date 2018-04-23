@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.10.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -22,6 +21,7 @@
 #include <QtWidgets/QWidget>
 #include "oglwidget.h"
 #include "oglwidget2.h"
+#include "oglwidget3.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -29,9 +29,9 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QHBoxLayout *horizontalLayout;
     OGLWidget *openGLWidget;
     OGLWidget2 *openGLWidget_2;
+    OGLWidget3 *openGLWidget_3;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -40,27 +40,23 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(961, 496);
+        MainWindow->resize(701, 515);
+        MainWindow->setAutoFillBackground(false);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        horizontalLayout = new QHBoxLayout(centralWidget);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         openGLWidget = new OGLWidget(centralWidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-
-        horizontalLayout->addWidget(openGLWidget);
-
+        openGLWidget->setGeometry(QRect(10, 10, 450, 450));
         openGLWidget_2 = new OGLWidget2(centralWidget);
         openGLWidget_2->setObjectName(QStringLiteral("openGLWidget_2"));
-
-        horizontalLayout->addWidget(openGLWidget_2);
-
+        openGLWidget_2->setGeometry(QRect(470, 10, 220, 220));
+        openGLWidget_3 = new OGLWidget3(centralWidget);
+        openGLWidget_3->setObjectName(QStringLiteral("openGLWidget_3"));
+        openGLWidget_3->setGeometry(QRect(470, 240, 220, 220));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 961, 21));
+        menuBar->setGeometry(QRect(0, 0, 701, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -76,7 +72,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Project01", nullptr));
     } // retranslateUi
 
 };

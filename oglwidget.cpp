@@ -2,8 +2,6 @@
 
 #define DEBUG
 
-int alpha = 0;
-
 bool OGLWidget::readData()
 {
     ifstream file("cube.obj");
@@ -413,7 +411,6 @@ void OGLWidget::InitLightingAndProjection() // to be executed once before drawin
     glDepthFunc( GL_LESS);
 
     glShadeModel( GL_SMOOTH); // Gouraud shading
-    //glShadeModel( GL_FLAT);
 
     glEnable( GL_LIGHTING); // use lighting
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, 1); // draw both sides
@@ -439,11 +436,6 @@ void OGLWidget::InitLightingAndProjection() // to be executed once before drawin
 void OGLWidget::drawQuad() // drawing a quad in OpenGL
 {
     if(readSuccess){
-
-        /*
-        cout << endl;
-        cout << "Zeichne Quads!" << endl;
-        */
 
         for(unsigned int i=0; i<quads.size();i++){
             Quad  q = quads.at(i);
@@ -488,8 +480,8 @@ void OGLWidget::initializeGL() // initializations to be called once
         ccSubdivision();
         ccSubdivision();
         ccSubdivision();
-        ccSubdivision();
-        ccSubdivision();
+        //ccSubdivision();
+        //ccSubdivision();
         printToFile();
     }
 }
@@ -499,7 +491,7 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
 
     // set background color
-    glClearColor(1, 1, 1, 1.0);
+    glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
@@ -511,7 +503,7 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     alpha += 2;
 
     // define color: 1=front, 2=back, 3=both, followed by r, g, and b
-    SetMaterialColor( 1, 1.0, 0.2, .2);  // front color is red
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
 
     // draw a cylinder with default resolution
