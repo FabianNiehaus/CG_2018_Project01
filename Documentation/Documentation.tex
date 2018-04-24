@@ -59,18 +59,6 @@ In order to render the quads, a new class inheriting QTs QOpenGLWidget is implem
 
 \subsubsection{Rendering as GL_LINES}
 
-\large
-\textbf{Problem} \\
--Develop a class Vertex and a class Quad. The Vertex class may contain three coordinates and the
-valence (number of edges). The Quad class may contain the indices of four vertices and of four
-adjacent quads. Normal vectors can be calculated from the cross product between two diagonals.\\
--Implement a function to read points and faces from OBJ. You can assume that all faces are quads (for an example, see cube.obj). Since the number of vertices and quads is not known before reading the file, static arrays are not a good choice. Instead, vectors may be used: vector vertices; vector quads;\\
--Implement a function drawing the mesh c1 as quadrilateral polygons and c2 as wireframe, using GLQUADS (with normal vectors and lighting) and GLLINES (without lighting), respectively.\\[0,5cm]
-
-In order to render Quads Meshes read from an .obj file, we need a data structure to store vertices and quads. The vertices need to contain their three coordinates as well their valence. The quads need to store their four corner vertices and their four adjacent quads.
-To fill the data structure with actual data, a method that reads the .obj file ist required. We can assume that every face is a quad.
-Lastly a rendering environment is needed. We will render the object twice - once as a simple wireframe without lighting and once as a solid cube with lighting.
-
 
 \textbf{Approach}\\
 As a framework for solving the problem we used OpenGL and QT Creator. In the program QT the Vertex class and Quad class are created.\\

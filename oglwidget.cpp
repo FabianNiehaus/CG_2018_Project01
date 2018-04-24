@@ -24,8 +24,8 @@ bool OGLWidget::readData()
         }
 
         if(key == "f"){
+            if(file.eof()) break;
             file >> p1 >> p2 >> p3 >> p4;
-            if( file.eof() ) break;
             quads.push_back( Quad(p1-1, p2-1, p3-1, p4-1));
         }
     }
@@ -102,6 +102,9 @@ void OGLWidget::determineQuadNeighbours()
                 }
             }
         }
+
+        q = quads.at(i);
+        int a = 1;
     }
 
 #ifdef DEBUG_VERBOSE
@@ -260,9 +263,9 @@ void OGLWidget::subdivideAndReconnectMesh(){
         for(int j = 0; j < 4; j++){
 
             int v0 = q.getV( pos_mod(j,4) );
-            int v1 = q.getE( pos_mod(j-1,4) );
+            int v1 = q.getE( pos_mod(j,4) );
             int v2 = q.getF();
-            int v3 = q.getE( pos_mod(j,4) );
+            int v3 = q.getE( pos_mod(j-1,4) );
 
             vertices.at(v0).setType("v");
             vertices.at(v1).setType("v");
@@ -453,6 +456,7 @@ void OGLWidget::drawQuad() // drawing a quad in OpenGL
             glBegin(GL_QUADS);
 
                 QVector3D vecTemp = QVector3D::crossProduct(vec3-vec1,vec4-vec2);
+
                 glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
 
                 glVertex3d(v0.getX(), v0.getY(), v0.getZ());
@@ -497,8 +501,8 @@ void OGLWidget::paintGL() // draw everything, to be called repeatedly
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
     glLoadIdentity();				// Reset The Current Modelview Matrix
-    glTranslated( 0 ,0 ,-10.0);     // Move 10 units backwards in z, since camera is at origin
-    glScaled( 5.0, 5.0, 5.0);       // scale objects
+    glTranslated( 0 ,0 ,-1.0);     // Move 10 units backwards in z, since camera is at origin
+    glScaled( 2,2,2);       // scale objects
     glRotated( alpha, 0, 3, 1);     // continuous rotation
     alpha += 2;
 

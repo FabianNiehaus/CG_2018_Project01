@@ -22,8 +22,8 @@ bool OGLWidget2::readData()
         }
 
         if(key == "f"){
+            if(file.eof()) break;
             file >> p1 >> p2 >> p3 >> p4;
-            if( file.eof() ) break;
             quads.push_back(Quad(p1-1, p2-1, p3-1, p4-1));
         }
     }
@@ -182,8 +182,8 @@ void OGLWidget2::paintGL() // draw everything, to be called repeatedly
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
     glLoadIdentity();				// Reset The Current Modelview Matrix
-    glTranslated( 0 ,0 ,-10.0);     // Move 10 units backwards in z, since camera is at origin
-    glScaled( 5.0, 5.0, 5.0);       // scale objects
+    glTranslated( 0 ,0 ,-1.0);     // Move 10 units backwards in z, since camera is at origin
+    glScaled( 2,2,2);       // scale objects
     glRotated( alpha, 0, 3, 1);     // continuous rotation
     alpha += 2;
 
