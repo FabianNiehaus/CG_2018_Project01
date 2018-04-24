@@ -76,12 +76,19 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.gz
+*.toc
+
+# QT compilation and settings files
+*.stash
+*.Debug
+*.Release
 *.34b7661
 *.user
 debug/*
 release/*
 *Makefile*
-*.aux
-*.log
-*.gz
-*.toc

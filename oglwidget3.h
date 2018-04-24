@@ -3,8 +3,8 @@
  * Autoren: Tuyet Nguyen, Fabian Niehaus
  */
 
-#ifndef OGLWIDGET2_H
-#define OGLWIDGET2_H
+#ifndef OGLWIDGET3_H
+#define OGLWIDGET3_H
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -24,14 +24,14 @@
 using namespace std;
 
 
-class OGLWidget2 : public QOpenGLWidget,
+class OGLWidget3 : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {
     Q_OBJECT
 
 public:
-    OGLWidget2(QWidget *parent = 0);
-    ~OGLWidget2();
+    OGLWidget3(QWidget *parent = 0);
+    ~OGLWidget3();
 
 public slots:
     void stepAnimation();
@@ -59,4 +59,4 @@ private:
 };
 
 
-#endif // OGLWIDGET2_H
+#endif // OGLWIDGET3_H
