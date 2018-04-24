@@ -1,3 +1,8 @@
+/*
+ * Datum: 24.04.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef OGLWIDGET2_H
 #define OGLWIDGET2_H
 
