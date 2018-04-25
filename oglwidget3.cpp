@@ -2,7 +2,7 @@
 
 bool OGLWidget3::readData()
 {
-    ifstream file("cube.obj");
+    ifstream file("threeholes.obj");
 
     if(!file){
         cout << "error opening file" << endl;
@@ -150,7 +150,7 @@ void OGLWidget3::paintGL() // draw everything, to be called repeatedly
     glMatrixMode( GL_MODELVIEW);
     glLoadIdentity();				// Reset The Current Modelview Matrix
     glTranslated( 0 ,0 ,-1.0);     // Move 10 units backwards in z, since camera is at origin
-    glScaled( 2,2,2);       // scale objects
+    glScaled(2,2,2);       // scale objects
     glRotated( alpha, 0, 3, 1);     // continuous rotation
     alpha += 2;
 

@@ -2,7 +2,7 @@
 
 bool OGLWidget2::readData()
 {
-    ifstream file("cube.obj");
+    ifstream file("threeholes.obj");
 
     if(!file){
         cout << "error opening file" << endl;
