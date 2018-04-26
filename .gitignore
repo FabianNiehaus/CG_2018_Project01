@@ -82,6 +82,7 @@ $RECYCLE.BIN/
 *.log
 *.gz
 *.toc
+*.idx
 
 # QT compilation and settings files
 *.stash
@@ -92,3 +93,4 @@ $RECYCLE.BIN/
 debug/*
 release/*
 *Makefile*
+

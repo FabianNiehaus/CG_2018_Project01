@@ -8,8 +8,14 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{graphicx}
+
+% Für Verwendugn von Utnerstrichen ohne Escaping
 \usepackage{underscore}
+
+% Für Referenzen mit eigenem Text
 \usepackage{hyperref}
+
+% Für Codeblöcke
 \usepackage{listings}
 
 % Für Verwendung von Farben
@@ -19,64 +25,88 @@
 \usepackage{esvect}
 
 % Für Größe der Seitenränder
-\usepackage[margin=1in,footskip=0.25in]{geometry}
+\usepackage[margin=1in,footskip=0.5in]{geometry}
 
 % Für Tabellen über Seiten hinweg
 \usepackage{longtable}
 
+% Für Header and Footer
+\usepackage[automark]{scrpage2}
+
+% Formatierung für Hyperref-Referenzen
+\hypersetup{
+	colorlinks,
+	linkcolor={blue!50!black},
+	citecolor={blue!50!black},
+	urlcolor={blue!80!black}
+}
+
+% Generelle Formatierung für Code-Blöcke
 \lstset{ %
 	columns=fullflexible,
 	keepspaces=true,
 	frame=single,
 	breaklines=true,
-	breakautoindent=true, 
-	breakindent=0pt,
+	breakautoindent=true,
 	gobble=0,
 	tabsize=2,
 	belowskip=0pt
 }
 
+% Formatierung für Pseudo-Code
 \lstdefinelanguage{PSEUDO} 
 { 
 	xleftmargin=0pt, 
 	xrightmargin=0pt,
 	basicstyle=\small\ttfamily\color{Black},
-	moredelim=*[l][\color{Orange}]{for each},
+	morekeywords={for, each, if, else},	
+	keywordstyle = {\color{Orange}},
+	sensitive=false,
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]"
 }
 
-\graphicspath{Images/}
- 
-\title{Documentation - Computer Graphics Project 1}
-\author{}
+\title{Rendering and Manipulating Quad Meshes}
+\author{Fabian Niehaus, Tuyet Nguyen}
 \date{24. April 2018}
+
+\makeatletter
+
+%% Generelle Kopf- und Fußzeilendefinition
+\pagestyle{scrheadings}
+\automark[section]{subsection} 
+\clearscrheadfoot
+\ihead[]{\@title}
+\ohead[]{\rightmark}
+\ifoot[]{\@author}
 
 \begin{document}
 
+\begin{titlepage}
+	\centering
+	\ \\[2cm]
+	{\huge\textbf{\@title}} 
+	\\[3cm]
+	\large
+	\textbf{Field of study:} Media informatics \\
+	\textbf{Semester:} 4
+	\\[3cm]
+	\textbf {Authors:}
+	\\Fabian Niehaus
+	\\501297
+	\\Tuyet Nguyen
+	\\5009445
+\end{titlepage}
 
-\maketitle
-
-\begin{center}
-
-\Large
-\textbf{Field of study:} Media informatics
-\\
-\textbf{Semester:} 4
-\\[3cm]
-\textbf {Authors:}
-\\Fabian Niehaus
-\\501297
-\\Tuyet Nguyen
-\\5009445
-
-\end{center}
 \newpage
-\Large
+%% Seitezahl auf 0 setzen
+\setcounter{page}{0}
 \tableofcontents
+
 \newpage
-\Large
-\vspace{3cm}
-
-
+%% Seitennummern einblenden
+\ofoot[]{\pagemark}
 \normalsize
 
 \section{Abstract}
@@ -84,25 +114,25 @@ In this project we will build a C++ application that can read, render and write 
 
 \section{Realisation}
 
-\subsection{Creating an interface with QT}\label{subsec:create-interface}
-First off, we create a new QT widget application. This allows us to use QT Creators design feature to set up our application's interface. A new QOpenGLWidget is placed and will be used as a placeholder for a new custom class inheriting QOpenGLWidgets functionality. This class, called OGLWidget, needs to implement the following methods: initializeGL (for setting up OpenGL), paintGL (for doing the actual rendering), resizeGL (for handling resizes of the display window). Additionally, the functions SetMaterialColor and InitLightingAndProjection\footnote{Taken from Dr. Martin Hering-Bertrams OpenGL-Example} are used.
+\subsection{Creating an interface with QT}
+First off, we create a new QT widget application. This allows us to use QT Creators design feature to set up our application's interface. A new QOpenGLWidget is placed and will be used as a placeholder for a new custom class inheriting QOpenGLWidgets functionality. This class, called OGLWidget, needs to implement the following methods: initializeGL (for setting up OpenGL), paintGL (for doing the actual rendering), resizeGL (for handling resizes of the display window). Additionally, the functions SetMaterialColor and InitLightingAndProjection\footnote{Taken from Prof. Dr. Martin Hering-Bertrams OpenGL_Example} are used.
 
-\subsection{Creating the data structure}\label{subsec:create-structure}
+\subsection{Creating the data structure}
 In this step, the data structure for storing vertices and quads is implemented. This structure consist of a class "Vertex" containing the three coordinates and the valence and a class "Quad" containing the indices of four vertices, the indices of four adjacent quads, the index of its face vertex and the four indices of its edge vertices, the latter two being calculated in the process of the Catmull-Clark subdivision. The individual vertices and quads are stored in a vector list each.
 
-\subsection{Reading the data from a file}\label{subsec:read-data}
+\subsection{Reading the data from a file}
 After creating the required data structure, a method for reading the vertices and faces from an .obj file is implemented. For this project we can assume that every face is a quad. The distinction between a vertex and a quad is made by the first letter in the line, a "v" for vertices and an "f" for quads. \\
 Each line is read, and depending on the first letter a new Vertex or Quad is created and pushed to the respective vector.
 If everything has been read correctly, a "true" value is returned.
 
-\subsection{Rendering}\label{subsec:rendering}
+\subsection{Rendering}
 Depending on the desired way of rendering the object, different draw methods are implemented. These methods are then being called from the paintGL() function.
 
 \subsubsection{Rendering as a wireframe}
 At first, we want to render the object a wireframe without any specific lighting or normals. The method drawLines() implements this by going through the list of quads and connecting every two points that are next to each other, using GL_Lines. Every line needs two points as input, so every point is mentioned twice considering we need 4 lines per quad in total.
 
 \subsubsection{Rendering as a cube}
-After drawing the object as a wireframe we want to draw it as a solid cube with lighting. This is being achieved in the method drawQuads() which once again iterates over the list of quads. This time, using GL_Quads, the four vertices of a quad are connected and the area inbetween is filled. The normal vector for this is calculated using the cross product of the two diagonals vectors.
+After drawing the object as a wireframe we want to draw it as a solid cube with lighting. This is being achieved in the method drawQuads() which once again iterates over the list of quads. This time using GL_Quads, the four vertices of a quad are connected and the area inbetween is filled. The normal vector for this is calculated using the cross product of the two diagonals vectors.
 
 \subsection{Calculation the vertex valence}
 After making sure that the meshes are read and rendered correctly, the vertex valence is to be calculated. Vertex valence in this context means how many edges a single vertex is connected to. To calculate this, the following algorithm is used:
@@ -111,8 +141,9 @@ After making sure that the meshes are read and rendered correctly, the vertex va
 \begin{lstlisting}[language=PSEUDO]
 for each verxtex 
 	for each quad 
- 		for each vertex of quad
-   			index of vertices equal? increase valence of vertex by 1
+ 		for each vertex of this quad
+   			if index of both vertices is equal 
+   				increase valence of vertex by 1
 \end{lstlisting}
 
 \subsection{Determining adjacent quads}
@@ -121,8 +152,8 @@ In order to determine each quads adjacent quads (or neighbors for short), we nee
 \begin{lstlisting}[language=PSEUDO]
 for each quad
 	for i = 0 to 3 // since each quad has 4 vertices
-		a = index of vertex at (i % 4)
-		b = index of vertex at ((i+1) % 4)
+		a = index of vertex at i
+		b = index of vertex at (i+1)%4
 		for each quad that is not the current one
 			compare all vertices to a and b
 			if a and b have a match
@@ -132,12 +163,12 @@ for each quad
 \subsection{Printing the data}
 In order to verify the correctness of the results, all data is printed to the console. Additionally, each vertex (now with their valence) and quad (now with its neighbors) is written back to a .obj file.
 
-\subsection{Implementing Catmull-Clark-Subdivision}
+\subsection{Catmull-Clark-Subdivision}
 
 \subsubsection{Calculating the Face-Mask}
 In the first step of the Catmull-Clark-Subdivision process, the so called Face-Mask is calculated. It describes the middle point of each quad. Mathematically speaking, it is the average of the four vertices of the quad:
 
-$$ \vv{f} = \frac{1}{4}*( \vv{v\textsubscript{0}} + \vv{v\textsubscript{1}} + \vv{v\textsubscript{2}} + \vv{v\textsubscript{3}}) $$
+$$ \vv{f} = \frac{1}{4}*( \vv{v}\textsubscript{0} + \vv{v}\textsubscript{1} + \vv{v}\textsubscript{2} + \vv{v}\textsubscript{3}) $$
 
 This calculation is run for every quad. The resulting vertex is added to the list of vertices, and the index of it is stored within the quad.
 
@@ -145,7 +176,7 @@ This calculation is run for every quad. The resulting vertex is added to the lis
 In the next step, the four edge masks are calculated. These vertices are the average between two end vertices of an edge and the face vertices of the two quads sharing this egde.\\
 The formula for a single one of these points is:
 
-$$ \vv{e} = \frac{1}{4} * (\vv{v\textsubscript{a}} + \vv{v\textsubscript{b}} + \vv{f} + \vv{f}\textsubscript{neighbor}) $$
+$$ \vv{e} = \frac{1}{4} * (\vv{v}\textsubscript{a} + \vv{v}\textsubscript{b} + \vv{f} + \vv{f}\textsubscript{neighbor}) $$
 
 This calculation is only run once per edge, meaning that only the quad with the lower index calculates the mask. The adjacent quad with the higher index only copies the reference. The following algorithm is used for the entire calculation.
 \begin{lstlisting}[language=PSEUDO]
@@ -164,20 +195,20 @@ for each i = 0 to (size of quads - 1)
 \subsubsection{Calculating the Vertex-Masks}
 The last mask calculated is the Vertex-Mask. With this mask every original vertex of a quad is repositioned using the following formula:
 
-$$ \vv{ v\textsubscript{new}} = \frac{1}{(n\textsubscript{v})^{2}}*(2 \vv{ e \textsubscript{v\textsubscript{left}}} + 2 \vv{ e \textsubscript{v\textsubscript{right}}} - \vv{f\textsubscript{v}} +\vv{v} (n\textsubscript{v}(n\textsubscript{v}-3))) $$
+$$ \vv{v}\textsubscript{new} = \frac{1}{(n\textsubscript{v})^{2}}*(2 \vv{e}\textsubscript{v\textsubscript{left}} + 2 \vv{e}\textsubscript{v\textsubscript{right}} - \vv{f}\textsubscript{v} +\vv{v} (n\textsubscript{v}(n\textsubscript{v}-3))) $$
 
 The implementation is split into the three following steps:\\
 \ \\
 1.) Multiply every corner vertex with a product of its valence: $ \vv{v}\textsubscript{new} = \vv{v} (n\textsubscript{v}(n\textsubscript{v}-3)$
-\begin{lstlisting}
+\begin{lstlisting}[language=PSEUDO]
 for each vertex
 	if vertex is corner vertex
 		recalculate the vertex using the above formula
 \end{lstlisting}
 \ \\
 \ \\
-2.) Add edge vertices and subtract face vertex from each corner vertex of each quad: $\vv{v}\textsubscript{new} = \vv{v} + 2 \vv{e}\textsubscript{v\textsubscript{right}} + 2 \vv{e}\textsubscript{v\textsubscript{left}} - \vv{f}\textsubscript{v}$
-\begin{lstlisting}
+2.) Add edge vertices and subtract face vertex from each corner vertex of each quad: $\vv{v}\textsubscript{new} = \vv{v} + 2 \vv{e}\textsubscript{v\textsubscript{left}} + 2 \vv{e}\textsubscript{v\textsubscript{right}} - \vv{f}\textsubscript{v}$
+\begin{lstlisting}[language=PSEUDO]
 for each quad
 	for each corner vertex of this quad
 		recalculate the vertex using the above formula
@@ -185,7 +216,7 @@ for each quad
 \ \\
 \ \\
 3.) Divide each corner vertex by its valence squared: $ \vv{v}\textsubscript{new} = \vv{v} * \frac{1}{(n\textsubscript{v})^{2}}$
-\begin{lstlisting}
+\begin{lstlisting}[language=PSEUDO]
 for each vertex
 	if vertex is corner vertex
 		recalculate the vertex using the above formula
@@ -193,7 +224,7 @@ for each vertex
 
 \subsubsection{Reconnecting the mesh}
 In the final step of the Catmull-Clark-Subdivision every quad is divided into 4 smaller quads. These smaller quads are added to a newvector. After all quads have been subdivided, the original vector storing the quads is overwritten with the new vector storing four times the amout of quads.
-\begin{lstlisting}
+\begin{lstlisting}[language=PSEUDO]
 for each quad
 	for j = 0 to 4
 		v0 = corner vertex of the quad at index j
@@ -205,63 +236,63 @@ for each quad
 
 \section{Results}
 \subsection{Number of vertices, faces (quads) and edges after subdivision}
-\begin{table}[h]
-	\begin{tabular}{ll}
-		Data used: cube.obj & Data used: threehole.obj \\
-		\begin{tabular}{|l|l|l|l|}
-			\hline
-			Subdivisions & Vertices & Faces & Edges \\
-			\hline
-			0 & 8 & 6 & 12 \\
-			\hline
-			1 & 32 & 24 & 48 \\
-			\hline
-			2 & 128 & 96 & 192 \\
-			\hline
-			3 & 512 & 384 & 768 \\
-			\hline
-		\end{tabular}
-		&
-		\begin{tabular}{|l|l|l|l|}
-			\hline
-			Subdivisions & Vertices & Faces & Edges \\
-			\hline
-			0 & 64 & 68 & 136 \\
-			\hline
-			1 & 268 & 272 & 536 \\
-			\hline
-			2 & 1084 & 1088 & 2176 \\
-			\hline
-			3 & 4348 & 4348 & 8696 \\
-			\hline
-		\end{tabular}
-		\\
+
+\begin{tabular}{ll}
+	Data used: cube.obj & Data used: threehole.obj \\
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		Subdivisions & Vertices & Faces & Edges \\
+		\hline
+		0 & 8 & 6 & 12 \\
+		\hline
+		1 & 32 & 24 & 48 \\
+		\hline
+		2 & 128 & 96 & 192 \\
+		\hline
+		3 & 512 & 384 & 768 \\
+		\hline
 	\end{tabular}
-\end{table}
+	&
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		Subdivisions & Vertices & Faces & Edges \\
+		\hline
+		0 & 64 & 68 & 136 \\
+		\hline
+		1 & 268 & 272 & 536 \\
+		\hline
+		2 & 1084 & 1088 & 2176 \\
+		\hline
+		3 & 4348 & 4348 & 8696 \\
+		\hline
+	\end{tabular}
+	\\
+\end{tabular}
+
 
 \subsection{Rendering and subdivision}
 
-	\begin{longtable}{cc}
-		\includegraphics[width=150px, height=150px]{Images/cube-wireframe.png} 
-		& \includegraphics[width=150px, height=150px]{Images/threeholes-wireframe.png}  \\
-		\multicolumn{2}{c}{Wireframe Cube and Threeholes} \\
-		&\\
-		\includegraphics[width=150px, height=150px]{Images/cube-solid.png} 
-		& \includegraphics[width=150px, height=150px]{Images/threeholes-solid.png}  \\
-		\multicolumn{2}{c}{Solid Cube and Threeholes} \\
-		&\\
-		\includegraphics[width=150px, height=150px]{Images/cube-1sd.png} 
-		& \includegraphics[width=150px, height=150px]{Images/threeholes-1sd.png}  \\
-		\multicolumn{2}{c}{1 CC-Subdivision Cube and Threeholes} \\
-		&\\
-		\includegraphics[width=150px, height=150px]{Images/cube-2sd.png} 
-		& \includegraphics[width=150px, height=150px]{Images/threeholes-2sd.png}  \\
-		\multicolumn{2}{c}{2 CC-Subdivisions Cube and Threeholes} \\
-		&\\
-		\includegraphics[width=150px, height=150px]{Images/cube-3sd.png} 
-		& \includegraphics[width=150px, height=150px]{Images/threeholes-3sd.png}  \\
-		\multicolumn{2}{c}{3 CC-Subdivisions Cube and Threeholes} \\
-	\end{longtable}
+\begin{longtable}{cc}
+	\includegraphics[width=150px, height=150px]{Images/cube-wireframe.png} 
+	& \includegraphics[width=150px, height=150px]{Images/threeholes-wireframe.png}  \\
+	\multicolumn{2}{c}{Wireframe Cube and Threeholes} \\
+	&\\
+	\includegraphics[width=150px, height=150px]{Images/cube-solid.png} 
+	& \includegraphics[width=150px, height=150px]{Images/threeholes-solid.png}  \\
+	\multicolumn{2}{c}{Solid Cube and Threeholes} \\
+	&\\
+	\includegraphics[width=150px, height=150px]{Images/cube-1sd.png} 
+	& \includegraphics[width=150px, height=150px]{Images/threeholes-1sd.png}  \\
+	\multicolumn{2}{c}{1 CC-Subdivision Cube and Threeholes} \\
+	&\\
+	\includegraphics[width=150px, height=150px]{Images/cube-2sd.png} 
+	& \includegraphics[width=150px, height=150px]{Images/threeholes-2sd.png}  \\
+	\multicolumn{2}{c}{2 CC-Subdivisions Cube and Threeholes} \\
+	&\\
+	\includegraphics[width=150px, height=150px]{Images/cube-3sd.png} 
+	& \includegraphics[width=150px, height=150px]{Images/threeholes-3sd.png}  \\
+	\multicolumn{2}{c}{3 CC-Subdivisions Cube and Threeholes} \\
+\end{longtable}
 
 \section{Conclusion}
 We were able to successfully build an application that can read and write any kind of boundary-free quad meshes, render them and perform Catmull-Clark-Subdivision on them. We gained a deeper understanding of how OpenGL and QT work and of the mathematics behing the specific subdivision concept. We will be able to extend the code for further applications and to reuse parts of it for other purposes e.g. calculation of Bezier surfaces.
