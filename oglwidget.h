@@ -25,7 +25,7 @@
 
 using namespace std;
 
-
+//Widget mit Subdivision
 class OGLWidget : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {

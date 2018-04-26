@@ -34,7 +34,7 @@ bool OGLWidget3::readData()
     return true;
 }
 
-void OGLWidget3::drawQuad() // drawing a quad in OpenGL
+void OGLWidget3::drawLines() // drawing a quad in OpenGL
 {
     if(readSuccess){
 
@@ -159,7 +159,7 @@ void OGLWidget3::paintGL() // draw everything, to be called repeatedly
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
 
     // draw a cylinder with default resolution
-    drawQuad();
+    drawLines();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glFlush();

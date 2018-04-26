@@ -23,7 +23,7 @@
 
 using namespace std;
 
-
+// Widget für Wireframe
 class OGLWidget3 : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {
@@ -51,7 +51,7 @@ private:
     vector<Vertex> vertices;
     vector<Quad> quads;
     bool readData();
-    void drawQuad();
+    void drawLines();
 
     int alpha = 0;
 

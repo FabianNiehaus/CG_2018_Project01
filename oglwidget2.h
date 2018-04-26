@@ -23,7 +23,7 @@
 
 using namespace std;
 
-
+// Widget für soliden Würfel
 class OGLWidget2 : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {
