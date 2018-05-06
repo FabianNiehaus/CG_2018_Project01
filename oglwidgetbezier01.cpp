@@ -1,77 +1,9 @@
 #include "oglwidgetbezier01.h"
 
-#define DEBUG
-// #define DEBUG_VERBOSE
-
-bool OGLWidgetBezier01::readData()
-{
-    ifstream file("bezierInput.mesh");
-
-    if(!file){
-        cout << "error opening file" << endl;
-        return false;
-    }
-
-    vector<vector<vector<float>>> values(3);
-    int xyz = 0;
-    string line;
-
-    while( getline(file, line)){
-
-        if(line.empty()){
-            xyz++;
-        }
-
-        stringstream linestream(line);
-
-        float value;
-        vector<float> singleRow(0);
-
-        while(linestream >> value){
-           singleRow.push_back(value);
-        }
-
-        if(!line.empty()) values.at(xyz).push_back(singleRow);
-    }
-
-    file.close();
-
-    int cols =values.at(0).at(0).size();
-    int rows = values.at(0).size();
-
-    inputMat.setSize(rows, cols);
-
-    for(int i = 0; i < rows; i++){
-        for(int j = 0; j < cols; j++){
-
-            float x = values.at(0).at(i).at(j);
-            float y = values.at(1).at(i).at(j);
-            float z = values.at(2).at(i).at(j);
-
-            preBezierVertices.push_back(Vertex(x,y,z,"v"));
-            inputMat.setAt(i,j, preBezierVertices.size()-1);
-        }
-    }
-
-    for(int i = 0; i < m; i++){
-        for(int j = 0; j < n; j++){
-
-            preBezierQuads.push_back(
-                        Quad(
-                            inputMat.at(i,j),
-                            inputMat.at(i,j+1),
-                            inputMat.at(i+1,j+1),
-                            inputMat.at(i+1,j)
-                            ));
-        }
-    }
-
-    cout << "[Bezier] Objekt-Datei eingelesen!" << endl;
-    return true;
-}
-
 void OGLWidgetBezier01::drawLines()
 {
+    vector<Quad> preBezierQuads = bSurf.getPreQuads();
+    vector<Vertex> preBezierVertices = bSurf.getPreBezierVertices();
 
     for(unsigned int i=0; i<preBezierQuads.size();i++){
         Quad q = preBezierQuads.at(i);
@@ -100,139 +32,40 @@ void OGLWidgetBezier01::drawLines()
     }
 }
 
-
-
 void OGLWidgetBezier01::drawQuad() // drawing a quad in OpenGL
 {
-    if(readSuccess){
+    vector<Quad> postBezierQuads = bSurf.getPostQuads();
+    vector<Vertex> postBezierVertices = bSurf.getPostBezierVertices();
 
-        for(unsigned int i=0; i<postBezierQuads.size();i++){
-            Quad  q = postBezierQuads.at(i);
+    for(unsigned int i=0; i<postBezierQuads.size();i++){
+        Quad  q = postBezierQuads.at(i);
 
-            Vertex  v0 = postBezierVertices.at(q.getV(0));
-            Vertex  v1 = postBezierVertices.at(q.getV(1));
-            Vertex  v2 = postBezierVertices.at(q.getV(2));
-            Vertex  v3 = postBezierVertices.at(q.getV(3));
+        Vertex  v0 = postBezierVertices.at(q.getV(0));
+        Vertex  v1 = postBezierVertices.at(q.getV(1));
+        Vertex  v2 = postBezierVertices.at(q.getV(2));
+        Vertex  v3 = postBezierVertices.at(q.getV(3));
 
-            QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
-            QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
-            QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
-            QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
+        QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
+        QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
+        QVector3D vec3 = QVector3D(v2.getX(), v2.getY(), v2.getZ());
+        QVector3D vec4 = QVector3D(v3.getX(), v3.getY(), v3.getZ());
 
-            glBegin(GL_QUADS);
+        glBegin(GL_QUADS);
 
-                QVector3D vecTemp = QVector3D::crossProduct(vec3-vec1,vec4-vec2);
+            QVector3D vecTemp = QVector3D::crossProduct(vec3-vec1,vec4-vec2);
 
-                glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
+            glNormal3d(vecTemp.x(), vecTemp.y(), vecTemp.z());
 
-                glVertex3d(v0.getX(), v0.getY(), v0.getZ());
-                glVertex3d(v1.getX(), v1.getY(), v1.getZ());
-                glVertex3d(v2.getX(), v2.getY(), v2.getZ());
-                glVertex3d(v3.getX(), v3.getY(), v3.getZ());
+            glVertex3d(v0.getX(), v0.getY(), v0.getZ());
+            glVertex3d(v1.getX(), v1.getY(), v1.getZ());
+            glVertex3d(v2.getX(), v2.getY(), v2.getZ());
+            glVertex3d(v3.getX(), v3.getY(), v3.getZ());
 
-            glEnd();
+        glEnd();
 
-        }
     }
 }
 
-void OGLWidgetBezier01::calculateBezier()
-{
-
-    postBezierMat.setSize(steps+1, steps+1);
-
-    for(float s = 0.0; s < (1.0 + 1.0 / steps); s += 1.0 / steps){
-        for(float t = 0.0; t < (1.0 + 1.0 / steps); t += 1.0 / steps){
-
-            Vertex v = Vertex(0.0f,0.0f,0.0f,"v");
-
-            for(int i = 0; i <= m; i++){
-                for(int j = 0; j <= n; j++){
-
-                    Vertex vIn = Vertex(preBezierVertices.at(inputMat.at(i,j)));
-
-                    Vertex vTemp = Vertex::multiplyVertex(vIn, bernstein(m,i,s) * bernstein(n,j,t));
-
-                    v = Vertex::addVertices(v, vTemp);
-
-#ifdef DEBUG_VERBOSE
-    cout << "Bezier: " << s << " " << t << " " << i << " " << j << " vIn: " << vIn.toString() << " vTemp: " << vTemp.toString() << " Res: " << v.toString() << endl;
-#endif
-                }
-            }
-
-#ifdef DEBUG
-            cout << "(" << s * steps << "," << t * steps << ") New: " << v.toString() << endl;
-#endif
-
-            postBezierVertices.push_back(v);
-            postBezierMat.setAt((int)(s * steps), (int)(t * steps), postBezierVertices.size()-1);
-        }
-    }
-
-    for(int i = 0; i < steps; i++){
-        for(int j = 0; j < steps; j++){
-
-            postBezierQuads.push_back(
-                        Quad(
-                            postBezierMat.at(i,j),
-                            postBezierMat.at(i,j+1),
-                            postBezierMat.at(i+1,j+1),
-                            postBezierMat.at(i+1,j)
-                            ));
-        }
-    }
-
-}
-
-float OGLWidgetBezier01::bernstein(int n, int i, float s)
-{
-    float bernstein = 0.0;
-
-    bernstein = choose(n,i);
-    bernstein *= pow(s,i);
-    bernstein *= pow(1.0-s, n-i);
-
-#ifdef DEBUG_VERBOSE
-    cout << "Bernst.: " << n << " " << i << " " << s << " Res:" << bernstein << endl;
-#endif
-
-    return bernstein;
-}
-
-float OGLWidgetBezier01::choose(int n, int i)
-{
-    float choose = 0.0;
-
-    int top = fact(n);
-    int div = fact(i) * fact(n-i);
-
-    if((float)div != 0.0) choose = (float)top / (float)div;
-    else choose = 1;
-
-#ifdef DEBUG_VERBOSE
-    cout << "Choose: " << n << " " << i << " Res:" << choose << endl;
-#endif
-
-    return choose;
-}
-
-int OGLWidgetBezier01::fact(int n)
-{
-    int input = n;
-    int fact = 0;
-
-    while(n > 0){
-        fact *= n;
-        n--;
-    }
-
-#ifdef DEBUG_VERBOSE
-    cout << "Fact.: " << input << " Res:" << fact << endl;
-#endif
-
-    return fact;
-}
 
 OGLWidgetBezier01::OGLWidgetBezier01(QWidget *parent) : QOpenGLWidget(parent) // constructor
 {
@@ -324,8 +157,7 @@ void OGLWidgetBezier01::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
-    readSuccess = readData();
-    calculateBezier();
+    bSurf.calculateBezier();
 
 }
 

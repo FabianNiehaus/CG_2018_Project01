@@ -38,7 +38,9 @@ SOURCES += \
     cubewindow.cpp \
     bezierwindow.cpp \
     oglwidgetbezier01.cpp \
-    vertexmatrix.cpp
+    vertexmatrix.cpp \
+    beziersurface.cpp \
+    sweepsurface.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -50,7 +52,9 @@ HEADERS += \
     cubewindow.h \
     bezierwindow.h \
     oglwidgetbezier01.h \
-    vertexmatrix.h
+    vertexmatrix.h \
+    beziersurface.h \
+    sweepsurface.h
 
 FORMS += \
         mainwindow.ui \

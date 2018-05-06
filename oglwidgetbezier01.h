@@ -18,6 +18,7 @@
 #include "vertex.h"
 #include "quad.h"
 #include "vertexmatrix.h"
+#include "beziersurface.h"
 
 using namespace std;
 
@@ -46,31 +47,10 @@ protected:
     int animstep;      // Current animation step (used to rotate triangle
 
 private:
-    vector<Vertex> preBezierVertices;
-    vector<Vertex> postBezierVertices;
-
-    vector<Quad> preBezierQuads;
-    vector<Quad> postBezierQuads;
-
-    bool readData();
+    BezierSurface bSurf;
 
     void drawLines();
     void drawQuad();
-
-    void calculateBezier();
-    float bernstein(int n, int i, float s);
-    float choose(int n, int i);
-    int fact(int n);
-
-    int m = 3;
-    int n = 3;
-
-    VertexMatrix inputMat;
-    VertexMatrix postBezierMat;
-
-    int steps = 20;
-
-    bool readSuccess = false;
 
     bool rotating = true;
     bool rotation = true;
