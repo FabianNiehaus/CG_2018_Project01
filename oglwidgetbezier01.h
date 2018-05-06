@@ -48,7 +48,7 @@ protected:
     int animstep;      // Current animation step (used to rotate triangle
 
 private:
-    //BezierSurface bSurf;
+    BezierSurface bSurf;
     SweepSurface sSurf;
 
     void drawLines(vector<Quad> quads, vector<Vertex> vertices);
@@ -56,7 +56,7 @@ private:
     void drawLine(vector<QVector2D> points);
 
     bool rotating = true;
-    bool rotation = false;
+    bool rotation = true;
 
     int alpha = 0;
 };

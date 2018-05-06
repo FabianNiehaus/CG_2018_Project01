@@ -164,7 +164,7 @@ void OGLWidgetBezier01::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
-    //bSurf.calculateBezier();
+    bSurf.calculateBezier();
     sSurf;
     sSurf.performBlackmagic();
 
@@ -180,9 +180,13 @@ void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
 
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
+
+
     glLoadIdentity();
-    glTranslated( -1.5 ,0 ,0);
     glScaled(2,2,2);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
+    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
+    glTranslated( -5 ,0 ,0);
     if(rotation) glRotated( 90, 1, 0, 0.1);
     if(rotating) {
         glTranslated(1.5,1.5,0);
@@ -190,16 +194,21 @@ void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
         glRotated(alpha, 0, 0, 1);
         glTranslated(-1.5,-1.5,0);
     }
+    drawLines(bSurf.getPreQuads(), bSurf.getPreBezierVertices());
+    drawQuad(bSurf.getPostQuads(), bSurf.getPostBezierVertices());
 
-    // define color: 1=front, 2=back, 3=both, followed by r, g, and b
+    glLoadIdentity();
+    glScaled(1,2,2);
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-
-    // draw a cylinder with default resolution
-    //drawLines(bSurf.getPreQuads(), bSurf.getPreBezierVertices());
-    //drawQuad(bSurf.getPostQuads(), bSurf.getPostBezierVertices());
-    //drawLine(sSurf.getPreBezierPoints());
-    //drawLine(sSurf.getPostBezierPoints());
+    glTranslated(1,0,0);
+    if(rotation) glRotated(15, 0, 0, 0);
+    if(rotating) {
+        glTranslated(0,0,0);
+        alpha += 2;
+        glRotated(alpha, 1, 0, 0);
+        glTranslated(0,0,0);
+    }
     drawQuad(sSurf.getQuads(), sSurf.getVertices());
 
     // make it appear (before this, it's hidden in the rear buffer)
