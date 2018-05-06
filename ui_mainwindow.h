@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.10.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -16,12 +16,10 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
-#include "oglwidget.h"
-#include "oglwidget2.h"
-#include "oglwidget3.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -29,9 +27,8 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    OGLWidget *openGLWidget;
-    OGLWidget2 *openGLWidget_2;
-    OGLWidget3 *openGLWidget_3;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -40,23 +37,20 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(701, 515);
+        MainWindow->resize(347, 128);
         MainWindow->setAutoFillBackground(false);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        openGLWidget = new OGLWidget(centralWidget);
-        openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setGeometry(QRect(10, 10, 450, 450));
-        openGLWidget_2 = new OGLWidget2(centralWidget);
-        openGLWidget_2->setObjectName(QStringLiteral("openGLWidget_2"));
-        openGLWidget_2->setGeometry(QRect(470, 10, 220, 220));
-        openGLWidget_3 = new OGLWidget3(centralWidget);
-        openGLWidget_3->setObjectName(QStringLiteral("openGLWidget_3"));
-        openGLWidget_3->setGeometry(QRect(470, 240, 220, 220));
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(20, 10, 121, 51));
+        pushButton_2 = new QPushButton(centralWidget);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setGeometry(QRect(190, 10, 121, 51));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 701, 21));
+        menuBar->setGeometry(QRect(0, 0, 347, 21));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -72,7 +66,9 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Project01", 0));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Project01", nullptr));
+        pushButton->setText(QApplication::translate("MainWindow", "Teilprojekt 1", nullptr));
+        pushButton_2->setText(QApplication::translate("MainWindow", "Teilprojekt 2", nullptr));
     } // retranslateUi
 
 };

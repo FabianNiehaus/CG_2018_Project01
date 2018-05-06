@@ -34,7 +34,11 @@ SOURCES += \
     quad.cpp \
     oglwidget.cpp \
     oglwidget2.cpp \
-    oglwidget3.cpp
+    oglwidget3.cpp \
+    cubewindow.cpp \
+    bezierwindow.cpp \
+    oglwidgetbezier01.cpp \
+    vertexmatrix.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +46,13 @@ HEADERS += \
     quad.h \
     oglwidget.h \
     oglwidget2.h \
-    oglwidget3.h
+    oglwidget3.h \
+    cubewindow.h \
+    bezierwindow.h \
+    oglwidgetbezier01.h \
+    vertexmatrix.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    cubewindow.ui \
+    bezierwindow.ui

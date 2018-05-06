@@ -1,5 +1,10 @@
 #include "vertex.h"
 
+Vertex::Vertex()
+{
+
+}
+
 Vertex::Vertex(float x, float y, float z, string type)
 {
     this->x = x;
@@ -15,6 +20,15 @@ Vertex::Vertex(float x, float y, float z, int valence, string type)
     this->z = z;
     this->n = valence;
     this->type = type;
+}
+
+Vertex::Vertex(const Vertex& v)
+{
+    this->x = v.getX();
+    this->y = v.getY();
+    this->z = v.getZ();
+    this->n = v.getValence();
+    this->type = v.getType();
 }
 
 float Vertex::getX() const

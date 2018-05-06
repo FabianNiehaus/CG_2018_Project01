@@ -13,8 +13,12 @@ using namespace std;
 class Vertex
 {
 public:
+    Vertex();
+
     Vertex(float x, float y, float z, string type);
     Vertex(float x, float y, float z, int valence, string type);
+
+    Vertex(const Vertex& v);
 
     float getX() const;
     void setX(float value);

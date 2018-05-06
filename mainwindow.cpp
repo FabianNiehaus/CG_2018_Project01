@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "cubewindow.h"
+#include "bezierwindow.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -11,4 +14,16 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    CubeWindow * cw = new CubeWindow();
+    cw->show();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    BezierWindow * bw = new BezierWindow();
+    bw->show();
 }
