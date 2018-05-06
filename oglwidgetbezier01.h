@@ -19,6 +19,7 @@
 #include "quad.h"
 #include "vertexmatrix.h"
 #include "beziersurface.h"
+#include "sweepsurface.h"
 
 using namespace std;
 
@@ -47,13 +48,15 @@ protected:
     int animstep;      // Current animation step (used to rotate triangle
 
 private:
-    BezierSurface bSurf;
+    //BezierSurface bSurf;
+    SweepSurface sSurf;
 
-    void drawLines();
-    void drawQuad();
+    void drawLines(vector<Quad> quads, vector<Vertex> vertices);
+    void drawQuad(vector<Quad> quads, vector<Vertex> vertices);
+    void drawLine(vector<QVector2D> points);
 
     bool rotating = true;
-    bool rotation = true;
+    bool rotation = false;
 
     int alpha = 0;
 };

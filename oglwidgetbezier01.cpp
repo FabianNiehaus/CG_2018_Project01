@@ -1,17 +1,15 @@
 #include "oglwidgetbezier01.h"
 
-void OGLWidgetBezier01::drawLines()
+void OGLWidgetBezier01::drawLines(vector<Quad> quads, vector<Vertex> vertices)
 {
-    vector<Quad> preBezierQuads = bSurf.getPreQuads();
-    vector<Vertex> preBezierVertices = bSurf.getPreBezierVertices();
 
-    for(unsigned int i=0; i<preBezierQuads.size();i++){
-        Quad q = preBezierQuads.at(i);
+    for(unsigned int i=0; i<quads.size();i++){
+        Quad q = quads.at(i);
 
-        Vertex v0 = preBezierVertices.at(q.getV(0));
-        Vertex v1 = preBezierVertices.at(q.getV(1));
-        Vertex v2 = preBezierVertices.at(q.getV(2));
-        Vertex v3 = preBezierVertices.at(q.getV(3));
+        Vertex v0 = vertices.at(q.getV(0));
+        Vertex v1 = vertices.at(q.getV(1));
+        Vertex v2 = vertices.at(q.getV(2));
+        Vertex v3 = vertices.at(q.getV(3));
 
         glBegin(GL_LINES);
             //glColor3f(0.0,0.0,0.0);
@@ -32,18 +30,17 @@ void OGLWidgetBezier01::drawLines()
     }
 }
 
-void OGLWidgetBezier01::drawQuad() // drawing a quad in OpenGL
+void OGLWidgetBezier01::drawQuad(vector<Quad> quads, vector<Vertex> vertices) // drawing a quad in OpenGL
 {
-    vector<Quad> postBezierQuads = bSurf.getPostQuads();
-    vector<Vertex> postBezierVertices = bSurf.getPostBezierVertices();
 
-    for(unsigned int i=0; i<postBezierQuads.size();i++){
-        Quad  q = postBezierQuads.at(i);
 
-        Vertex  v0 = postBezierVertices.at(q.getV(0));
-        Vertex  v1 = postBezierVertices.at(q.getV(1));
-        Vertex  v2 = postBezierVertices.at(q.getV(2));
-        Vertex  v3 = postBezierVertices.at(q.getV(3));
+    for(unsigned int i=0; i<quads.size();i++){
+        Quad  q = quads.at(i);
+
+        Vertex  v0 = vertices.at(q.getV(0));
+        Vertex  v1 = vertices.at(q.getV(1));
+        Vertex  v2 = vertices.at(q.getV(2));
+        Vertex  v3 = vertices.at(q.getV(3));
 
         QVector3D vec1 = QVector3D(v0.getX(), v0.getY(), v0.getZ());
         QVector3D vec2 = QVector3D(v1.getX(), v1.getY(), v1.getZ());
@@ -63,6 +60,16 @@ void OGLWidgetBezier01::drawQuad() // drawing a quad in OpenGL
 
         glEnd();
 
+    }
+}
+
+void OGLWidgetBezier01::drawLine(vector<QVector2D> points)
+{
+    for(unsigned int i = 0; i < points.size() - 1; i++){
+        glBegin(GL_LINES);
+            glVertex3f(points.at(i).x(), points.at(i).y(), 0.0);
+            glVertex3f(points.at(i+1).x(), points.at(i+1).y(), 0.0);
+        glEnd();
     }
 }
 
@@ -157,7 +164,9 @@ void OGLWidgetBezier01::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
-    bSurf.calculateBezier();
+    //bSurf.calculateBezier();
+    sSurf;
+    sSurf.performBlackmagic();
 
 }
 
@@ -187,8 +196,11 @@ void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
 
     // draw a cylinder with default resolution
-    drawLines();
-    drawQuad();
+    //drawLines(bSurf.getPreQuads(), bSurf.getPreBezierVertices());
+    //drawQuad(bSurf.getPostQuads(), bSurf.getPostBezierVertices());
+    //drawLine(sSurf.getPreBezierPoints());
+    //drawLine(sSurf.getPostBezierPoints());
+    drawQuad(sSurf.getQuads(), sSurf.getVertices());
 
     // make it appear (before this, it's hidden in the rear buffer)
     glFlush();
