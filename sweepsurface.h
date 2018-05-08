@@ -17,7 +17,7 @@ class SweepSurface
 public:
     SweepSurface();
 
-    void performBlackmagic();
+    void performBlackMagic();
 
     vector<QVector2D> getPreBezierPoints() const;
     vector<QVector2D> getPostBezierPoints() const;

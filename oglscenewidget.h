@@ -1,10 +1,6 @@
-/*
- * Datum: 24.04.2018
- * Autoren: Tuyet Nguyen, Fabian Niehaus
- */
+#ifndef OGLSCENEWIDGET_H
+#define OGLSCENEWIDGET_H
 
-#ifndef OGLWIDGET_H
-#define OGLWIDGET_H
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -17,23 +13,26 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 
 #include "vertex.h"
 #include "quad.h"
-
-#include <cmath>
+#include "vertexmatrix.h"
+#include "cubesurface.h"
+#include "beziersurface.h"
+#include "sweepsurface.h"
 
 using namespace std;
 
-//Widget mit Subdivision
-class OGLWidget : public QOpenGLWidget,
+
+class OGLSceneWidget : public QOpenGLWidget,
                   protected QOpenGLFunctions
 {
     Q_OBJECT
 
 public:
-    OGLWidget(QWidget *parent = 0);
-    ~OGLWidget();
+    OGLSceneWidget(QWidget *parent = 0);
+    ~OGLSceneWidget();
 
 public slots:
     void stepAnimation();
@@ -50,12 +49,18 @@ protected:
     int animstep;      // Current animation step (used to rotate triangle
 
 private:
+    CubeSurface * cSurf1;
+    CubeSurface * cSurf2;
+    BezierSurface * bSurf;
+    SweepSurface * sSurf;
 
-    // Ursprünglicher Rotationswinkel
+    void drawLines(vector<Quad> quads, vector<Vertex> vertices);
+    void drawQuad(vector<Quad> quads, vector<Vertex> vertices);
+
+    bool rotating = true;
+    bool rotation = true;
+
     int alpha = 0;
-
-    void drawQuad();
 };
 
-
-#endif // OGLWIDGET_H
+#endif // OGLSCENEWIDGET_H

@@ -1,6 +1,6 @@
-#include "oglwidgetbezier01.h"
+#include "oglscenewidget.h"
 
-void OGLWidgetBezier01::drawLines(vector<Quad> quads, vector<Vertex> vertices)
+void OGLSceneWidget::drawLines(vector<Quad> quads, vector<Vertex> vertices)
 {
 
     for(unsigned int i=0; i<quads.size();i++){
@@ -30,7 +30,7 @@ void OGLWidgetBezier01::drawLines(vector<Quad> quads, vector<Vertex> vertices)
     }
 }
 
-void OGLWidgetBezier01::drawQuad(vector<Quad> quads, vector<Vertex> vertices) // drawing a quad in OpenGL
+void OGLSceneWidget::drawQuad(vector<Quad> quads, vector<Vertex> vertices) // drawing a quad in OpenGL
 {
 
 
@@ -63,7 +63,7 @@ void OGLWidgetBezier01::drawQuad(vector<Quad> quads, vector<Vertex> vertices) //
     }
 }
 
-OGLWidgetBezier01::OGLWidgetBezier01(QWidget *parent) : QOpenGLWidget(parent) // constructor
+OGLSceneWidget::OGLSceneWidget(QWidget *parent) : QOpenGLWidget(parent) // constructor
 {
     if(rotating){
     // Setup the animation timer to fire every x msec
@@ -77,19 +77,19 @@ OGLWidgetBezier01::OGLWidgetBezier01(QWidget *parent) : QOpenGLWidget(parent) //
     }
 }
 
-OGLWidgetBezier01::~OGLWidgetBezier01() // destructor
+OGLSceneWidget::~OGLSceneWidget() // destructor
 {
 
 }
 
-void OGLWidgetBezier01::stepAnimation()
+void OGLSceneWidget::stepAnimation()
 {
     animstep++;    // Increase animation steps
     update();      // Trigger redraw of scene with paintGL
 }
 
 // define material color properties for front and back side
-void OGLWidgetBezier01::SetMaterialColor( int side, float r, float g, float b){
+void OGLSceneWidget::SetMaterialColor( int side, float r, float g, float b){
     float	amb[4], dif[4], spe[4];
     int	i, mat;
 
@@ -113,7 +113,7 @@ void OGLWidgetBezier01::SetMaterialColor( int side, float r, float g, float b){
 }
 
 // initialize Open GL lighting and projection matrix
-void OGLWidgetBezier01::InitLightingAndProjection() // to be executed once before drawing
+void OGLSceneWidget::InitLightingAndProjection() // to be executed once before drawing
 {
 
     // light positions and colors
@@ -148,12 +148,13 @@ void OGLWidgetBezier01::InitLightingAndProjection() // to be executed once befor
 
 }
 
-void OGLWidgetBezier01::initializeGL() // initializations to be called once
+void OGLSceneWidget::initializeGL() // initializations to be called once
 {
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
     cSurf1 = new CubeSurface();
+    cSurf2 = new CubeSurface();
     bSurf = new BezierSurface();
     sSurf = new SweepSurface();
 
@@ -165,7 +166,7 @@ void OGLWidgetBezier01::initializeGL() // initializations to be called once
 
 }
 
-void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
+void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
 {
     glEnable(GL_NORMALIZE); // this is necessary when using glScale (keep normals to unit length)
 
@@ -175,6 +176,34 @@ void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
 
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
+
+    glLoadIdentity();
+    glScaled(1,1,1);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
+    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
+    glTranslated( -5 ,3 ,0);
+    if(rotation) glRotated( 0, 0, 0, 0);
+    if(rotating) {
+        glTranslated(3,3,0);
+        alpha += 2;
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(-3,-3,0);
+    }
+    drawQuad(cSurf1->getQuads(), cSurf1->getVertices());
+
+    glLoadIdentity();
+    glScaled(1,1,1);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
+    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
+    glTranslated( 1 ,3 ,0);
+    if(rotation) glRotated( 0, 0, 0, 0);
+    if(rotating) {
+        glTranslated(3,3,0);
+        alpha += 2;
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(-3,-3,0);
+    }
+    drawQuad(cSurf2->getQuads(), cSurf2->getVertices());
 
     glLoadIdentity();
     glScaled(2,2,2);
@@ -209,7 +238,7 @@ void OGLWidgetBezier01::paintGL() // draw everything, to be called repeatedly
     glFlush();
 }
 
-void OGLWidgetBezier01::resizeGL(int w, int h) // called when window size is changed
+void OGLSceneWidget::resizeGL(int w, int h) // called when window size is changed
 {
     // adjust viewport transform
     glViewport(0,0,w,h);

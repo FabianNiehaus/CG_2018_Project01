@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'bezierwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.10.1
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -56,7 +56,7 @@ public:
 
     void retranslateUi(QMainWindow *BezierWindow)
     {
-        BezierWindow->setWindowTitle(QApplication::translate("BezierWindow", "Teilprojekt 2", nullptr));
+        BezierWindow->setWindowTitle(QApplication::translate("BezierWindow", "Teilprojekt 2", 0));
     } // retranslateUi
 
 };

@@ -3,6 +3,7 @@
 
 #include "cubewindow.h"
 #include "bezierwindow.h"
+#include "scenewindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,4 +27,10 @@ void MainWindow::on_pushButton_2_clicked()
 {
     BezierWindow * bw = new BezierWindow();
     bw->show();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    SceneWindow * sw = new SceneWindow();
+    sw->show();
 }

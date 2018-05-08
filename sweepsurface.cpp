@@ -8,7 +8,7 @@ SweepSurface::SweepSurface()
     preBezierPoints.push_back(QVector2D(7,1));
 }
 
-void SweepSurface::performBlackmagic()
+void SweepSurface::performBlackMagic()
 {
     calculateCubicBezierCurve();
     createRotationalSweepSurface();

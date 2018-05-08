@@ -110,7 +110,7 @@ void BezierSurface::calculateBezier()
                     }
                 }
 
-    #ifdef DEBUG
+    #ifdef DEBUG_VERBOSE
                 cout << "(" << s * steps << "," << t * steps << ") New: " << v.toString() << endl;
     #endif
 
