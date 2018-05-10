@@ -27,8 +27,6 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
     QPushButton *pushButton_3;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
@@ -42,19 +40,13 @@ public:
         MainWindow->setAutoFillBackground(false);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(20, 10, 121, 51));
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(190, 10, 121, 51));
         pushButton_3 = new QPushButton(centralWidget);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        pushButton_3->setGeometry(QRect(100, 90, 121, 51));
+        pushButton_3->setGeometry(QRect(120, 50, 121, 51));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 347, 21));
+        menuBar->setGeometry(QRect(0, 0, 347, 17));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -71,8 +63,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Project01", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "Teilprojekt 1", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Teilprojekt 2", 0));
         pushButton_3->setText(QApplication::translate("MainWindow", "Abgabe", 0));
     } // retranslateUi
 

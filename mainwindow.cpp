@@ -17,17 +17,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    CubeWindow * cw = new CubeWindow();
-    cw->show();
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    BezierWindow * bw = new BezierWindow();
-    bw->show();
-}
 
 void MainWindow::on_pushButton_3_clicked()
 {
