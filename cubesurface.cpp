@@ -1,8 +1,8 @@
 #include "cubesurface.h"
 
-CubeSurface::CubeSurface()
+CubeSurface::CubeSurface(string filename)
 {
-
+    this->filename = filename;
 }
 
 void CubeSurface::performBlackMagic(int numOfSD)
@@ -36,7 +36,7 @@ vector<Quad> CubeSurface::getPreCCQuads() const
 
 void CubeSurface::readData()
 {
-    ifstream file("threeholes.obj");
+    ifstream file(filename.c_str());
 
     if(!file){
         cout << "error opening file" << endl;

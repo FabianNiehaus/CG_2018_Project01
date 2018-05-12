@@ -153,8 +153,8 @@ void OGLSceneWidget::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
-    cSurf1 = new CubeSurface();
-    cSurf2 = new CubeSurface();
+    cSurf1 = new CubeSurface("gear.obj");
+    cSurf2 = new CubeSurface("gear.obj");
     bSurf = new BezierSurface();
     sSurf = new SweepSurface();
 
@@ -181,13 +181,12 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     glScaled(1,1,1);
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( -11.5 ,3 ,0);
-    if(rotation) glRotated( 0, 0, 0, 0);
+    glTranslated( -6 ,5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
     if(rotating) {
-        glTranslated(3.5,3,0);
-        alpha += 2;
-        glRotated(alpha, 0, -1, 0);
-        glTranslated(-3.5,-3,0);
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
     }
     drawQuad(cSurf1->getQuads(), cSurf1->getVertices());
 
@@ -195,13 +194,12 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     glScaled(1,1,1);
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( 2.5 ,3 ,0);
-    if(rotation) glRotated( 0, 0, 0, 0);
+    glTranslated( 5 ,5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
     if(rotating) {
-        glTranslated(3.5,3,0);
-        alpha += 2;
-        glRotated(alpha, 0, -1, 0);
-        glTranslated(-3.5,-3,0);
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
     }
     drawQuad(cSurf2->getQuads(), cSurf2->getVertices());
 
@@ -209,11 +207,10 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     glScaled(2,2,2);
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( -5 ,-3 ,0);
+    glTranslated( -5 ,-4 ,0);
     if(rotation) glRotated( 90, 1, 0, 0.1);
     if(rotating) {
         glTranslated(1.5,1.5,0);
-        alpha += 2;
         glRotated(alpha, 0, 0, 1);
         glTranslated(-1.5,-1.5,0);
     }
@@ -224,15 +221,16 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     glScaled(1,2,2);
     SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
     SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated(2,-3,0);
-    if(rotation) glRotated(15, 0, 0, 0);
+    glTranslated(2,-4,0);
+    if(rotation) glRotated(15, 0, 5, 1);
     if(rotating) {
         glTranslated(0,0,0);
-        alpha += 2;
-        glRotated(alpha, 1, 0, 0);
+        glRotated(alpha, -1, 0, 0);
         glTranslated(0,0,0);
     }
     drawQuad(sSurf->getQuads(), sSurf->getVertices());
+
+    alpha += 2;
 
     // make it appear (before this, it's hidden in the rear buffer)
     glFlush();

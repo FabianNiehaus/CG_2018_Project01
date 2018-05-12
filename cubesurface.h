@@ -16,7 +16,7 @@
 class CubeSurface
 {
 public:
-    CubeSurface();
+    CubeSurface(string filename);
 
     void performBlackMagic(int numOfSD);
 
@@ -25,6 +25,8 @@ public:
     vector<Quad> getPreCCQuads() const;
 
 private:
+    string filename;
+
     vector<Vertex> vertices;
     vector<Quad> quads;
 

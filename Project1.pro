@@ -32,12 +32,12 @@ SOURCES += \
         mainwindow.cpp \
     vertex.cpp \
     quad.cpp \
-    oglwidget.cpp \
-    oglwidget2.cpp \
-    oglwidget3.cpp \
-    cubewindow.cpp \
-    bezierwindow.cpp \
-    oglwidgetbezier01.cpp \
+    #oglwidget.cpp \
+    #oglwidget2.cpp \
+    #oglwidget3.cpp \
+    #cubewindow.cpp \
+    #bezierwindow.cpp \
+    #oglwidgetbezier01.cpp \
     vertexmatrix.cpp \
     beziersurface.cpp \
     sweepsurface.cpp \
@@ -49,12 +49,12 @@ HEADERS += \
         mainwindow.h \
     vertex.h \
     quad.h \
-    oglwidget.h \
-    oglwidget2.h \
-    oglwidget3.h \
-    cubewindow.h \
-    bezierwindow.h \
-    oglwidgetbezier01.h \
+    #oglwidget.h \
+    #oglwidget2.h \
+    #oglwidget3.h \
+    #cubewindow.h \
+    #bezierwindow.h \
+    #oglwidgetbezier01.h \
     vertexmatrix.h \
     beziersurface.h \
     sweepsurface.h \
@@ -64,6 +64,6 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui \
-    cubewindow.ui \
-    bezierwindow.ui \
+    #cubewindow.ui \
+    #bezierwindow.ui \
     scenewindow.ui
