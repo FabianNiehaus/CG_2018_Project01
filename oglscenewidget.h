@@ -51,11 +51,19 @@ protected:
 private:
     CubeSurface * cSurf1;
     CubeSurface * cSurf2;
-    BezierSurface * bSurf;
-    SweepSurface * sSurf;
+
+    CubeSurface * tsurf1;
+    CubeSurface * tsurf2;
+
+    BezierSurface * bSurf1;
+    BezierSurface * bSurf2;
+
+    SweepSurface * sSurf1;
+    SweepSurface * sSurf2;
 
     void drawLines(vector<Quad> quads, vector<Vertex> vertices);
     void drawQuad(vector<Quad> quads, vector<Vertex> vertices);
+    void drawCoordinateSystem();
 
     bool rotating = true;
     bool rotation = true;

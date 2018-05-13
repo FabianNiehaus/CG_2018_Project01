@@ -1,11 +1,11 @@
 #include "beziersurface.h"
 
-#define DEBUG
+// #define DEBUG
 // #define DEBUG_VERBOSE
 
-BezierSurface::BezierSurface()
+BezierSurface::BezierSurface(string filename)
 {
-
+    this->filename = filename;
 }
 
 vector<Quad> BezierSurface::getPreQuads(){
@@ -18,7 +18,7 @@ vector<Quad> BezierSurface::getPostQuads(){
 
 void BezierSurface::readData()
 {
-    ifstream file("bezierInput.mesh");
+    ifstream file(filename.c_str());
 
     if(!file){
         cout << "error opening file" << endl;

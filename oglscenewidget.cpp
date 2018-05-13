@@ -63,6 +63,21 @@ void OGLSceneWidget::drawQuad(vector<Quad> quads, vector<Vertex> vertices) // dr
     }
 }
 
+void OGLSceneWidget::drawCoordinateSystem()
+{
+    glBegin(GL_LINES);
+        glVertex3d(-100,0,0);
+        glVertex3d(100,0,0);
+
+        glVertex3d(0,-100,0);
+        glVertex3d(0,100,0);
+
+        glVertex3d(0,-100,0);
+        glVertex3d(0,100,0);
+
+    glEnd();
+}
+
 OGLSceneWidget::OGLSceneWidget(QWidget *parent) : QOpenGLWidget(parent) // constructor
 {
     if(rotating){
@@ -155,14 +170,14 @@ void OGLSceneWidget::initializeGL() // initializations to be called once
 
     cSurf1 = new CubeSurface("gear.obj");
     cSurf2 = new CubeSurface("gear.obj");
-    bSurf = new BezierSurface();
-    sSurf = new SweepSurface();
+    bSurf1 = new BezierSurface("bezier01.surf");
+    sSurf1 = new SweepSurface("curve02.curve");
 
 
     cSurf1->performBlackMagic(0);
     cSurf2->performBlackMagic(3);
-    bSurf->calculateBezier();
-    sSurf->performBlackMagic();
+    bSurf1->calculateBezier();
+    sSurf1->performBlackMagic();
 
 }
 
@@ -176,6 +191,9 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
 
     // draw the scene
     glMatrixMode( GL_MODELVIEW);
+
+    glLoadIdentity();
+    drawCoordinateSystem();
 
     glLoadIdentity();
     glScaled(1,1,1);
@@ -214,8 +232,8 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
         glRotated(alpha, 0, 0, 1);
         glTranslated(-1.5,-1.5,0);
     }
-    drawLines(bSurf->getPreQuads(), bSurf->getPreBezierVertices());
-    drawQuad(bSurf->getPostQuads(), bSurf->getPostBezierVertices());
+    drawLines(bSurf1->getPreQuads(), bSurf1->getPreBezierVertices());
+    drawQuad(bSurf1->getPostQuads(), bSurf1->getPostBezierVertices());
 
     glLoadIdentity();
     glScaled(1,2,2);
@@ -228,7 +246,7 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
         glRotated(alpha, -1, 0, 0);
         glTranslated(0,0,0);
     }
-    drawQuad(sSurf->getQuads(), sSurf->getVertices());
+    drawQuad(sSurf1->getQuads(), sSurf1->getVertices());
 
     alpha += 2;
 

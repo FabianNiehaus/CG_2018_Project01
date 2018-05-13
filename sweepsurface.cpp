@@ -1,32 +1,65 @@
 #include "sweepsurface.h"
 
-SweepSurface::SweepSurface()
+SweepSurface::SweepSurface(string filename)
 {
-    preBezierPoints.push_back(QVector2D(0,0));
-    preBezierPoints.push_back(QVector2D(3,2));
-    preBezierPoints.push_back(QVector2D(4,-1));
-    preBezierPoints.push_back(QVector2D(7,1));
+    //preBezierPoints.push_back(QVector2D(0,0));
+    //preBezierPoints.push_back(QVector2D(3,2));
+    //preBezierPoints.push_back(QVector2D(4,-1));
+    //preBezierPoints.push_back(QVector2D(7,1));
+
+    this->filename = filename;
+}
+
+void SweepSurface::readData()
+{
+
+    ifstream file(filename.c_str());
+
+    if(!file){
+        cout << "error opening file" << endl;
+    } else {
+
+        float x,y;
+
+        while(file){
+            if(file.eof()) break;
+            file >> x >> y;
+            preBezierPoints.push_back( QVector2D(x,y));
+        }
+
+        file.close();
+
+        cout << endl;
+        cout << "[Sweep] Objekt-Datei eingelesen!" << endl;
+
+        readSuccess = true;
+    }
 }
 
 void SweepSurface::performBlackMagic()
 {
-    calculateCubicBezierCurve();
-    createRotationalSweepSurface();
+    readData();
+    if(readSuccess){
+        calculateCubicBezierCurve();
+        createRotationalSweepSurface();
+    }
 }
 
 void SweepSurface::calculateCubicBezierCurve()
 {
-    for(float t = 0.0; t <= 1.0 + (1.0 / steps); t += (1.0 / steps)){
+    for(float t = 0.0; t <= 1.0 * resolution; t++){
 
         QVector2D p1 = preBezierPoints.at(0);
         QVector2D p2 = preBezierPoints.at(1);
         QVector2D p3 = preBezierPoints.at(2);
         QVector2D p4 = preBezierPoints.at(3);
 
-        QVector2D pT = pow(1-t,3) * p1
-                + 3 * t * pow(1-t,2) * p2
-                + 3 * pow(t,2) * (1-t) * p3
-                + pow(t,3) * p4;
+        float tr = t / resolution;
+
+        QVector2D pT = pow(1-tr,3) * p1
+                + 3 * tr * pow(1-tr,2) * p2
+                + 3 * pow(tr,2) * (1-tr) * p3
+                + pow(tr,3) * p4;
 
         postBezierPoints.push_back(pT);
 
@@ -38,14 +71,14 @@ void SweepSurface::createRotationalSweepSurface()
 {
     int counter = 0;
 
-    sweepMesh.setSize(steps+1, steps+1);
+    sweepMesh.setSize(resolution + 1, resolution + 1);
 
-    for(float s = -1.0; s <= 1.1; s += 2.0 / steps){
-        for(int i = 0; i < postBezierPoints.size(); i++){
+    for(float s = -1.0 * resolution; s <= 1.0 * resolution; s += 2){
+        for(unsigned int i = 0; i < postBezierPoints.size(); i++){
 
             QVector2D v2D = postBezierPoints.at(i);
 
-            Vertex v = Vertex(v2D.x(), v2D.y() * sin(s*pi), v2D.y() * cos(s*pi), "v");
+            Vertex v = Vertex(v2D.x(), v2D.y() * sin(s / resolution * pi), v2D.y() * cos(s / resolution * pi), "v");
 
             sweepVertices.push_back(v);
             sweepMesh.setAt(counter, i, sweepVertices.size()-1);
@@ -53,8 +86,8 @@ void SweepSurface::createRotationalSweepSurface()
         counter++;
     }
 
-    for(int i = 0; i < steps; i++){
-        for(int j = 0; j < steps; j++){
+    for(int i = 0; i < resolution; i++){
+        for(int j = 0; j < resolution; j++){
 
             sweepQquads.push_back(
                         Quad(

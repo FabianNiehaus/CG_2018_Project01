@@ -67,18 +67,18 @@
 	morestring=[b]"
 }
 
-\title{Rendering and Manipulating Quad Meshes}
+\title{Rendering and Manipulating Quad Meshes and Bezier Surfaces}
 \author{Fabian Niehaus, Tuyet Nguyen}
-\date{April 26, 2018}
+\date{May 14, 2018}
 
 \makeatletter
 
 %% Generelle Kopf- und Fußzeilendefinition
 \pagestyle{scrheadings}
-\automark[section]{subsection} 
+%\automark[section]{subsection} 
 \clearscrheadfoot
 \ihead[]{\@title}
-\ohead[]{\rightmark}
+%\ohead[]{\rightmark}
 \ifoot[]{\@author}
 
 \begin{document}
@@ -96,9 +96,7 @@
 	\\[2cm]
 	\textbf {Authors:}
 	\\Fabian Niehaus
-	\\501297
 	\\Tuyet Nguyen
-	\\5009445
 \end{titlepage}
 
 \newpage
@@ -112,7 +110,7 @@
 \normalsize
 
 \section{Abstract}
-In this project we will build a C++ application that can read, render and write quad meshes as well as apply the Catmull-Clark subdivision algorithm. We will use QT Creator for programming, QT for window management and OpenGL for 3D rendering.
+In this project we will build a C++ application that can read, render and write quad meshes and apply the Catmull-Clark subdivision algorithm. It will also be able to read and compute Bezier surfaces and create rotational sweep surfaces from Bezier curves. We will use QT Creator for programming, QT for window management and OpenGL for 3D rendering.
 
 \section{Realisation}
 
@@ -120,14 +118,20 @@ In this project we will build a C++ application that can read, render and write 
 First off, we create a new QT widget application. This allows us to use QT Creators design feature to set up our application's interface. A new QOpenGLWidget is placed and will be used as a placeholder for a new custom class inheriting QOpenGLWidgets functionality. This class, called OGLWidget, needs to implement the following methods: initializeGL (for setting up OpenGL), paintGL (for doing the actual rendering), resizeGL (for handling resizes of the display window). Additionally, the functions SetMaterialColor and InitLightingAndProjection\footnote{Taken from Prof. Dr. Martin Hering-Bertrams OpenGL_Example} are used.
 
 \subsection{Creating the data structure}
-In this step, the data structure for storing vertices and quads is implemented. This structure consist of a class "Vertex" containing the three coordinates and the valence and a class "Quad" containing the indices of four vertices, the indices of four adjacent quads, the index of its face vertex and the four indices of its edge vertices, the latter two being calculated in the process of the Catmull-Clark subdivision. The individual vertices and quads are stored in a vector list each.
+The data structure is separated in different classes. \\
+The basic class "Vertex" contains the three coordinates and the valence. \\ 
+The basic class "Quad" contains the indices of four vertices, the indices of four adjacent quads, the index of its face vertex and the four indices of its edge vertices, the latter two being calculated in the process of the Catmull-Clark subdivision. \\
+Logic and data regarding the computation of quad meshes is stored in a seperate class, as are Bezier surfaces and rotational sweep surfaces. \\
+In order to allow for easier use of a two dimensional matrix of vertices, a wrapper class containing a two dimensional vector of vertices is introduces. \\
 
 \subsection{Reading the data from a file}
+\subsubsection{Quad mesh}
 After creating the required data structure, a method for reading the vertices and faces from an .obj file is implemented. For this project we can assume that every face is a quad. The distinction between a vertex and a quad is made by the first letter in the line, a "v" for vertices and an "f" for quads. \\
 Each line is read, and depending on the first letter a new Vertex or Quad is created and pushed to the respective vector.
-If everything has been read correctly, a "true" value is returned.
+\subsubsection{Bezier surface}\label{read-bezier}
+The initial surface data for Bezier calculations is stored in a data format that separates the x, y and z coordinates in different blocks. Each block is read and its values stored in a temporary matrix. After alls blocks have been read, a matrix of vertices is created from this data. This matrix is then used to create quads. Vertices and Quads are stored for further use within the object.
 
-\subsection{Rendering}
+\subsection{Rendering Quad meshes}
 Depending on the desired way of rendering the object, different draw methods are implemented. These methods are then being called from the paintGL() function.
 
 \subsubsection{Rendering as a wireframe}
@@ -234,6 +238,81 @@ for each quad
 		v2 = face vertex of the quad
 		v3 = edge vertex of the quad at index (j-1)%4 //tuned to always be positive
 		create new quad with corner vertices v0 - v4 and store it
+\end{lstlisting}
+
+\subsection{Bezier surface calculation}
+In this section, Bezier surface calculation is applied to the surface created when 
+\hyperref[read-bezier]{reading the bezier surface}. The calculation for a matrix of dimension 
+\textit{m}x\textit{n} uses the following forumla
+$$f(s,t) = \sum_{i=0}^{m} \sum_{j=0}^{n} b_ij*B_i^m(s)*B_j^n(t)$$
+where s and t are defined within [0;1]. \\
+\ \\
+B descibes the so called Bernstein polynomial $B_i^n(t) = {n \choose i}*t^i*(1-t)^{n-i}$. \\
+\ \\
+A resolution describing the amount of new vertices created is introduced. In this case we chose a value of 0.05 meaning 21x21 new points are calculated.
+\begin{lstlisting}[language=PSEUDO]
+for s = 0 -> 1; increased by resolution {
+	for t = 0 -> 1; increased by resolution 
+	
+		Vertex v = (0, 0, 0)
+	
+		for i = 0 -> m {
+			for j = 0 -> n 
+				
+				multiply vector at (i|j) with Bernstein 
+				polynomials of (i,m,s) and (j,n,t)
+					
+				add resulting vector to v
+		}
+		
+		store v in new matrix at position (s * resolution | t * resolution)
+\end{lstlisting}
+
+\subsection{Rotational sweep surface calculation}
+In this section, a rotational sweep surface is calculated from a single bicubic curve. 
+\subsubsection{Cubic bezier curve calculation}
+First, Bezier transformation is applied to the two dimensional curve using the formula below:
+$$ p(t) = (1-t)^3*p_1 + 3t*(1-t)^2*p_2 + 3t^2*(1-t)*p_3 + t^3*p_4$$
+$$t = [0;1]$$
+A resolution is of 0.05 is used for t, resulting in 21 new points.
+\begin{lstlisting}[language=PSEUDO]
+for t = 0 -> 1; increased by resolution
+	
+	calculate and store new point according to
+	the formula above
+	
+\end{lstlisting}
+\subsubsection{Rotational sweep surface creation}
+Using the Bezier curve calculated in the last step, a new surface is created. Since the curve is in two dimensional space we need translate every point into 3D space using the following logic:
+$$x_{new} = x$$
+$$y_{new} = y * sin(t * \pi)$$
+$$z_{new} = y * cos(t * \pi)$$
+$$t = [-1;1]$$
+Again, a resoultion of 0.05 is used resulting in a total of 21x21 new vertices.
+\begin{lstlisting}[language=PSEUDO]
+for t = 0 -> 1; increased by resolution
+	for i = 0 -> 20 // since there are 21 points
+	
+		calculate new vertex according to the formula above
+		using the vertex at index i as input
+		
+		store new vertex in matrix at position (t * resolution | i)
+\end{lstlisting}
+\ \\
+\ \\
+After calculating the vertices for the new surface, quads are also created in order to draw it using drawQuad().
+\begin{lstlisting}[language=PSEUDO]
+for i = 0 -> 20 - 1; // since we are also accessing i + 1 and j + 1
+	for j = 0 -> 20 - 1;
+		
+		create new Quad from (
+			vertex at (i|j)	
+			vertex at (i|j+1)
+			vertex at (i+1|j+1)
+			vertex at (i+1|j)
+		)
+
+		store new Quad
 \end{lstlisting}
 
 \section{Results}

@@ -20,7 +20,7 @@ using namespace std;
 class BezierSurface
 {
 public:
-    BezierSurface();
+    BezierSurface(string filename);
 
     vector<Quad> getPreQuads();
     vector<Quad> getPostQuads();
@@ -31,6 +31,8 @@ public:
     vector<Vertex> getPostBezierVertices() const;
 
 private:
+    string filename;
+
     vector<Vertex> preBezierVertices;
     vector<Vertex> postBezierVertices;
 

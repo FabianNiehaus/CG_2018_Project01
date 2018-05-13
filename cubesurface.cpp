@@ -63,7 +63,7 @@ void CubeSurface::readData()
         file.close();
 
         cout << endl;
-        cout << "Objekt-Datei eingelesen!" << endl;
+        cout << "[Cube] Objekt-Datei eingelesen!" << endl;
 
         readSuccess = true;
     }

@@ -5,6 +5,8 @@
 #include <QVector2D>
 #include <cmath>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #include "vertex.h"
 #include "vertexmatrix.h"
@@ -15,7 +17,9 @@ using namespace std;
 class SweepSurface
 {
 public:
-    SweepSurface();
+    SweepSurface(string filename);
+
+    void readData();
 
     void performBlackMagic();
 
@@ -26,6 +30,9 @@ public:
     vector<Quad> getQuads() const;
 
 private:
+    string filename;
+    bool readSuccess = false;
+
     vector<QVector2D> preBezierPoints;
     vector<QVector2D> postBezierPoints;
 
@@ -34,7 +41,7 @@ private:
 
     vector<Quad> sweepQquads;
 
-    int steps = 20;
+    float resolution = 20;
 
     const float pi = 3.1415927;
 
