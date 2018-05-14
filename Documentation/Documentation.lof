@@ -1,0 +1,23 @@
+\babel@toc {english}{}
+\contentsline {figure}{\numberline {1}{\ignorespaces Calculation vertex valence (pseudo code)\relax }}{3}{figure.1}
+\contentsline {figure}{\numberline {2}{\ignorespaces Determining adjacent quads (pseudo code)\relax }}{4}{figure.2}
+\contentsline {figure}{\numberline {3}{\ignorespaces Calculating the Edge-Masks (pseudo code)\relax }}{4}{figure.3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Calculating the Vertex-Masks - step 1 (pseudo code)\relax }}{5}{figure.4}
+\contentsline {figure}{\numberline {5}{\ignorespaces Calculating the Vertex-Masks - step 2 (pseudo code)\relax }}{5}{figure.5}
+\contentsline {figure}{\numberline {6}{\ignorespaces Calculating the Vertex-Masks - step 3 (pseudo code)\relax }}{5}{figure.6}
+\contentsline {figure}{\numberline {7}{\ignorespaces Reconnecting the mesh (pseudo code)\relax }}{5}{figure.7}
+\contentsline {figure}{\numberline {8}{\ignorespaces Bezier surface calculation (pseudo code)\relax }}{6}{figure.8}
+\contentsline {figure}{\numberline {9}{\ignorespaces Cubic bezier curve calculation (pseudo code)\relax }}{6}{figure.9}
+\contentsline {figure}{\numberline {10}{\ignorespaces Rotational sweep surface vertex creation (pseudo code)\relax }}{7}{figure.10}
+\contentsline {figure}{\numberline {11}{\ignorespaces Rotational sweep surface quad creation (pseudo code)\relax }}{7}{figure.11}
+\contentsline {figure}{\numberline {12}{\ignorespaces Setting tranlsation, rotation and color for a single object (pseudo code)\relax }}{7}{figure.12}
+\contentsline {figure}{\numberline {13}{\ignorespaces Subdivisions, vertices, faces and edges for Cube and Threeholes\relax }}{8}{figure.13}
+\contentsline {figure}{\numberline {14}{\ignorespaces Wireframe Cube and Threeholes\relax }}{8}{figure.14}
+\contentsline {figure}{\numberline {15}{\ignorespaces Solid Cube and Threeholes\relax }}{8}{figure.15}
+\contentsline {figure}{\numberline {16}{\ignorespaces 1 CC-Subdivision Cube and Threeholes\relax }}{9}{figure.16}
+\contentsline {figure}{\numberline {17}{\ignorespaces 2 CC-Subdivisions Cube and Threeholes\relax }}{9}{figure.17}
+\contentsline {figure}{\numberline {18}{\ignorespaces 3 CC-Subdivisions Cube and Threeholes\relax }}{9}{figure.18}
+\contentsline {figure}{\numberline {19}{\ignorespaces Wireframe, Solid, 1 CC and 3 CC Gear\relax }}{10}{figure.19}
+\contentsline {figure}{\numberline {20}{\ignorespaces Bezier surfaces generated from bezier01 and bezier02\relax }}{10}{figure.20}
+\contentsline {figure}{\numberline {21}{\ignorespaces Sweep surfaces generated from curve01 and curve02\relax }}{10}{figure.21}
+\contentsline {figure}{\numberline {22}{\ignorespaces Multiple objects in a single scene\relax }}{11}{figure.22}

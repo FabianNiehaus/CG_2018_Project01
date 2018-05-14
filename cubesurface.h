@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef CUBESURFACE_H
 #define CUBESURFACE_H
 
@@ -18,6 +23,7 @@ class CubeSurface
 public:
     CubeSurface(string filename);
 
+    // Daten einlesen, Valenzen und Nachbarn berechnen, CC-Subdivision
     void performBlackMagic(int numOfSD);
 
     vector<Vertex> getVertices() const;
@@ -30,6 +36,7 @@ private:
     vector<Vertex> vertices;
     vector<Quad> quads;
 
+    // Quads vor der CC-Berechnung
     vector<Quad> preCCQuads;
 
     // Einlesen der Daten aus .obj-Files

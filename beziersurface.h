@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef BEZIERSURFACE_H
 #define BEZIERSURFACE_H
 
@@ -32,6 +37,7 @@ public:
 
 private:
     string filename;
+    bool readSuccess = false;
 
     vector<Vertex> preBezierVertices;
     vector<Vertex> postBezierVertices;
@@ -45,16 +51,13 @@ private:
     VertexMatrix preBezierMat;
     VertexMatrix postBezierMat;
 
-    int steps = 20;
-
-    bool readSuccess = false;
+    // Anzahl der Schritte für Bezier
+    int resolution = 20;
 
     void readData();
 
     float bernstein(int n, int i, float s);
     float nChooseK(int n, int i);
-
-    void determineDegree();
 
 };
 

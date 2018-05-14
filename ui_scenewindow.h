@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -26,6 +27,7 @@ class Ui_SceneWindow
 {
 public:
     QWidget *centralwidget;
+    QHBoxLayout *horizontalLayout;
     OGLSceneWidget *openGLWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
@@ -34,16 +36,20 @@ public:
     {
         if (SceneWindow->objectName().isEmpty())
             SceneWindow->setObjectName(QStringLiteral("SceneWindow"));
-        SceneWindow->resize(800, 600);
+        SceneWindow->resize(900, 900);
         centralwidget = new QWidget(SceneWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
+        horizontalLayout = new QHBoxLayout(centralwidget);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         openGLWidget = new OGLSceneWidget(centralwidget);
         openGLWidget->setObjectName(QStringLiteral("openGLWidget"));
-        openGLWidget->setGeometry(QRect(10, 10, 740, 540));
+
+        horizontalLayout->addWidget(openGLWidget);
+
         SceneWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(SceneWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 900, 21));
         SceneWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(SceneWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));

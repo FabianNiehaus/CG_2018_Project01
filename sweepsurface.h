@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef SWEEPSURFACE_H
 #define SWEEPSURFACE_H
 
@@ -19,8 +24,7 @@ class SweepSurface
 public:
     SweepSurface(string filename);
 
-    void readData();
-
+    // Daten lesen, Bezier-Kurve berechnen, Rotational Sweep Surface erstellen
     void performBlackMagic();
 
     vector<QVector2D> getPreBezierPoints() const;
@@ -33,17 +37,21 @@ private:
     string filename;
     bool readSuccess = false;
 
+    // Punkte der Bezier-Kurve vor und nach der Berechnung
     vector<QVector2D> preBezierPoints;
     vector<QVector2D> postBezierPoints;
 
+    // Vertices und Quads der Oberfläche
     vector<Vertex> sweepVertices;
     VertexMatrix sweepMesh;
-
     vector<Quad> sweepQquads;
 
+    // Anzahl der Schritte für Bezier
     float resolution = 20;
 
     const float pi = 3.1415927;
+
+    void readData();
 
     void calculateCubicBezierCurve();
     void createRotationalSweepSurface();

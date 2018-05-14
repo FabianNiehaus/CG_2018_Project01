@@ -63,7 +63,7 @@ void OGLSceneWidget::drawQuad(vector<Quad> quads, vector<Vertex> vertices) // dr
     }
 }
 
-void OGLSceneWidget::drawCoordinateSystem()
+void OGLSceneWidget::drawQuadrantSeparators()
 {
     glBegin(GL_LINES);
         glVertex3d(-100,0,0);
@@ -159,7 +159,7 @@ void OGLSceneWidget::InitLightingAndProjection() // to be executed once before d
 
     glMatrixMode( GL_PROJECTION); // define camera projection
     glLoadIdentity(); // reset matrix to identity (otherwise existing matrix will be multiplied with)
-    glOrtho( -15, 15, -15, 15, -15, 15); // orthogonal projection (xmin xmax ymin ymax zmin zmax)
+    glOrtho( -20, 20, -20, 20, -20, 20); // orthogonal projection (xmin xmax ymin ymax zmin zmax)
 
 }
 
@@ -168,16 +168,40 @@ void OGLSceneWidget::initializeGL() // initializations to be called once
     initializeOpenGLFunctions();
     InitLightingAndProjection();
 
-    cSurf1 = new CubeSurface("gear.obj");
-    cSurf2 = new CubeSurface("gear.obj");
+    cSurf1 = new CubeSurface("cube.obj");
+    cSurf2 = new CubeSurface("cube.obj");
+
+    tSurf1 = new CubeSurface("threeholes.obj");
+    tSurf2 = new CubeSurface("threeholes.obj");
+
+    gSurf1 = new CubeSurface("gear.obj");
+    gSurf2 = new CubeSurface("gear.obj");
+    gSurf3 = new CubeSurface("gear.obj");
+    gSurf4 = new CubeSurface("gear.obj");
+
     bSurf1 = new BezierSurface("bezier01.surf");
-    sSurf1 = new SweepSurface("curve02.curve");
+    bSurf2 = new BezierSurface("bezier02.surf");
+
+    sSurf1 = new SweepSurface("curve01.curve");
+    sSurf2 = new SweepSurface("curve02.curve");
 
 
     cSurf1->performBlackMagic(0);
     cSurf2->performBlackMagic(3);
+
+    tSurf1->performBlackMagic(0);
+    tSurf2->performBlackMagic(3);
+
+    gSurf1->performBlackMagic(0);
+    gSurf2->performBlackMagic(0);
+    gSurf3->performBlackMagic(1);
+    gSurf4->performBlackMagic(3);
+
     bSurf1->calculateBezier();
+    bSurf2->calculateBezier();
+
     sSurf1->performBlackMagic();
+    sSurf2->performBlackMagic();
 
 }
 
@@ -193,39 +217,128 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     glMatrixMode( GL_MODELVIEW);
 
     glLoadIdentity();
-    drawCoordinateSystem();
+    drawQuadrantSeparators();
 
+    // Würfel ohne CC
     glLoadIdentity();
-    glScaled(1,1,1);
-    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
-    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( -6 ,5 ,0);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -15 ,15 ,0);
     if(rotation) glRotated( 15, 1, -1, 0);
     if(rotating) {
         glTranslated(0,0,0);
         glRotated(alpha, 0, 0, 1);
         glTranslated(0,0,0);
     }
+    glScaled(2,2,2);
     drawQuad(cSurf1->getQuads(), cSurf1->getVertices());
 
+    // Würfel mit CC
     glLoadIdentity();
-    glScaled(1,1,1);
-    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
-    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( 5 ,5 ,0);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -7.5 ,15 ,0);
     if(rotation) glRotated( 15, 1, -1, 0);
     if(rotating) {
         glTranslated(0,0,0);
         glRotated(alpha, 0, 0, 1);
         glTranslated(0,0,0);
     }
+    glScaled(2,2,2);
     drawQuad(cSurf2->getQuads(), cSurf2->getVertices());
 
+    // Threeholes ohne CC
     glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -18.5 ,4.5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(3.5,3,0);
+        glRotated(alpha, 0, -1, 0);
+        glTranslated(-3.5,-3,0);
+    }
+    glScaled(1,1,1);
+    drawQuad(tSurf1->getQuads(), tSurf1->getVertices());
+
+    // Threeholes mit CC
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -11 ,4.5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(3.5,3,0);
+        glRotated(alpha, 0, -1, 0);
+        glTranslated(-3.5,-3,0);
+    }
+    glScaled(1,1,1);
+    drawQuad(tSurf2->getQuads(), tSurf2->getVertices());
+
+    // Zahnrad als WF
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated(7.5 ,15 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
+    }
+    glScaled(1,1,1);
+    drawLines(gSurf1->getQuads(), gSurf1->getVertices());
+
+    // Zahnrad ohne CC
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated(15 ,15 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
+    }
+    glScaled(1,1,1);
+    drawQuad(gSurf2->getQuads(), gSurf2->getVertices());
+
+
+    // Zahnrad mit 1x CC
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated(7.5 ,7.5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
+    }
+    glScaled(1,1,1);
+    drawQuad(gSurf3->getQuads(), gSurf3->getVertices());
+
+    // Zahnrad mit 3x CC
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( 15 ,7.5 ,0);
+    if(rotation) glRotated( 15, 1, -1, 0);
+    if(rotating) {
+        glTranslated(0,0,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(0,0,0);
+    }
+    glScaled(1,1,1);
+    drawQuad(gSurf4->getQuads(), gSurf4->getVertices());
+
+
+    // Bezier 01
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -9 ,-7.5 ,0);
     glScaled(2,2,2);
-    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
-    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated( -5 ,-4 ,0);
     if(rotation) glRotated( 90, 1, 0, 0.1);
     if(rotating) {
         glTranslated(1.5,1.5,0);
@@ -235,18 +348,49 @@ void OGLSceneWidget::paintGL() // draw everything, to be called repeatedly
     drawLines(bSurf1->getPreQuads(), bSurf1->getPreBezierVertices());
     drawQuad(bSurf1->getPostQuads(), bSurf1->getPostBezierVertices());
 
+    // Bezier 02
     glLoadIdentity();
-    glScaled(1,2,2);
-    SetMaterialColor( 1, 1.0, 0.2, 0.2);  // front color is red
-    SetMaterialColor( 2, 0.2, 0.2, 1.0); // back color is blue
-    glTranslated(2,-4,0);
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated( -16.5 ,-15 ,0);
+    glScaled(2,2,2);
+    if(rotation) glRotated( 90, 1, 0, 0.1);
+    if(rotating) {
+        glTranslated(1.5,1.5,0);
+        glRotated(alpha, 0, 0, 1);
+        glTranslated(-1.5,-1.5,0);
+    }
+    drawLines(bSurf2->getPreQuads(), bSurf2->getPreBezierVertices());
+    drawQuad(bSurf2->getPostQuads(), bSurf2->getPostBezierVertices());
+
+
+    // Sweep 01
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated(2.5,-7.5,0);
     if(rotation) glRotated(15, 0, 5, 1);
     if(rotating) {
         glTranslated(0,0,0);
         glRotated(alpha, -1, 0, 0);
         glTranslated(0,0,0);
     }
+    glScaled(1,2,2);
     drawQuad(sSurf1->getQuads(), sSurf1->getVertices());
+
+    // Sweep 02
+    glLoadIdentity();
+    SetMaterialColor( 1, 1.0, 0.2, 0.2);
+    SetMaterialColor( 2, 0.2, 0.2, 1.0);
+    glTranslated(7.5,-15,0);
+    if(rotation) glRotated(15, 0, 5, 1);
+    if(rotating) {
+        glTranslated(0,0,0);
+        glRotated(alpha, -1, 0, 0);
+        glTranslated(0,0,0);
+    }
+    glScaled(1.5,1.5,1.5);
+    drawQuad(sSurf2->getQuads(), sSurf2->getVertices());
 
     alpha += 2;
 

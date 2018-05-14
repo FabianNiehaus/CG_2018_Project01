@@ -88,10 +88,10 @@ void BezierSurface::calculateBezier()
     readData();
 
     if(readSuccess){
-        postBezierMat.setSize(steps+1, steps+1);
+        postBezierMat.setSize(resolution+1, resolution+1);
 
-        for(float s = 0.0; s < (1.0 + 1.0 / steps); s += 1.0 / steps){
-            for(float t = 0.0; t < (1.0 + 1.0 / steps); t += 1.0 / steps){
+        for(float s = 0.0; s < (1.0 + 1.0 / resolution); s += 1.0 / resolution){
+            for(float t = 0.0; t < (1.0 + 1.0 / resolution); t += 1.0 / resolution){
 
                 Vertex v = Vertex(0.0f,0.0f,0.0f,"v");
 
@@ -115,12 +115,12 @@ void BezierSurface::calculateBezier()
     #endif
 
                 postBezierVertices.push_back(v);
-                postBezierMat.setAt((int)(s * steps), (int)(t * steps), postBezierVertices.size()-1);
+                postBezierMat.setAt((int)(s * resolution), (int)(t * resolution), postBezierVertices.size()-1);
             }
         }
 
-        for(int i = 0; i < steps; i++){
-            for(int j = 0; j < steps; j++){
+        for(int i = 0; i < resolution; i++){
+            for(int j = 0; j < resolution; j++){
 
                 postBezierQuads.push_back(
                             Quad(

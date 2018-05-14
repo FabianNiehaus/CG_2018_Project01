@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef SCENEWINDOW_H
 #define SCENEWINDOW_H
 

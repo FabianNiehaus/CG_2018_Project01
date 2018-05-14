@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef VERTEXMATRIX_H
 #define VERTEXMATRIX_H
 
@@ -18,6 +23,7 @@ public:
     void setSize(int m, int n);
 
 private:
+    // Matrix mit Vertex-Indizes
     vector<vector<int>> matrix;
 };
 

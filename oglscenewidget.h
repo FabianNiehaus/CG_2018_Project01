@@ -1,3 +1,8 @@
+/*
+ * Datum: 14.05.2018
+ * Autoren: Tuyet Nguyen, Fabian Niehaus
+ */
+
 #ifndef OGLSCENEWIDGET_H
 #define OGLSCENEWIDGET_H
 
@@ -49,25 +54,39 @@ protected:
     int animstep;      // Current animation step (used to rotate triangle
 
 private:
+    // Würfel
     CubeSurface * cSurf1;
     CubeSurface * cSurf2;
 
-    CubeSurface * tsurf1;
-    CubeSurface * tsurf2;
+    // Threeholes
+    CubeSurface * tSurf1;
+    CubeSurface * tSurf2;
 
+    // Zahnräder
+    CubeSurface * gSurf1;
+    CubeSurface * gSurf2;
+    CubeSurface * gSurf3;
+    CubeSurface * gSurf4;
+
+    // Bezier-Oberflächen
     BezierSurface * bSurf1;
     BezierSurface * bSurf2;
 
+    // Berzier-Kurven bzw. Rotational Sweep Surfaces
     SweepSurface * sSurf1;
     SweepSurface * sSurf2;
 
     void drawLines(vector<Quad> quads, vector<Vertex> vertices);
     void drawQuad(vector<Quad> quads, vector<Vertex> vertices);
-    void drawCoordinateSystem();
+    void drawQuadrantSeparators();
 
+    // Objekt sollen sich kontinuierlich drehen
     bool rotating = true;
+
+    // Objekte sollen anfangs einmal rotiert werden
     bool rotation = true;
 
+    // Rotationswinkel
     int alpha = 0;
 };
 
